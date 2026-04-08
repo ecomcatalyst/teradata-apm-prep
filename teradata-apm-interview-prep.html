@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teradata APM Interview Prep — Yashwanth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f4;
+  --surface: #ffffff;
+  --surface2: #f4f1ec;
+  --border: #e8e2d9;
+  --accent: #c84b2f;
+  --accent2: #1a3a5c;
+  --accent3: #2d7a4f;
+  --gold: #c9922a;
+  --text: #1a1714;
+  --muted: #7a7268;
+  --light: #a09890;
+  --font: 'Cabinet Grotesk', sans-serif;
+  --mono: 'Fira Code', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--accent2);
+  color: white;
+  padding: 52px 48px 44px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(200,75,47,0.18);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 30%;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 12px; font-family: var(--mono); letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.8); margin-bottom: 22px;
+}
+.hero h1 {
+  font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+.hero h1 span { color: #f0a070; }
+.hero-sub {
+  font-size: 16px; color: rgba(255,255,255,0.65);
+  max-width: 620px; line-height: 1.6; margin-bottom: 32px;
+}
+.hero-stats {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.h-stat {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; padding: 10px 18px;
+  font-size: 13px; font-weight: 700;
+}
+.h-stat span { color: #f0a070; font-family: var(--mono); }
+
+/* ── NAV TABS ── */
+.nav-wrap {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-tabs {
+  display: flex; gap: 0; overflow-x: auto;
+}
+.tab-btn {
+  padding: 16px 22px; border: none; background: none;
+  font-family: var(--font); font-size: 14px; font-weight: 700;
+  color: var(--muted); cursor: pointer; white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn .t-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 6px;
+  background: var(--surface2); font-size: 11px;
+  font-family: var(--mono); margin-left: 8px;
+}
+.tab-btn.active .t-num { background: rgba(200,75,47,0.12); color: var(--accent); }
+
+/* ── MAIN CONTENT ── */
+.main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── SECTION TITLES ── */
+.section-label {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 28px;
+}
+.section-label .icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.icon-red { background: rgba(200,75,47,0.1); }
+.icon-blue { background: rgba(26,58,92,0.1); }
+.icon-green { background: rgba(45,122,79,0.1); }
+.icon-gold { background: rgba(201,146,42,0.1); }
+
+.section-label .sl-text {}
+.sl-overline { font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.sl-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+
+/* ── Q CARD ── */
+.q-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; margin-bottom: 20px;
+  overflow: hidden;
+}
+.q-header {
+  padding: 22px 24px 0;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.q-num-badge {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--accent); background: rgba(200,75,47,0.08);
+  border: 1px solid rgba(200,75,47,0.2);
+  border-radius: 6px; padding: 3px 9px;
+  white-space: nowrap; margin-top: 3px;
+}
+.q-type-badge {
+  font-size: 11px; font-family: var(--mono);
+  border-radius: 6px; padding: 3px 9px;
+  border: 1px solid; white-space: nowrap; margin-top: 3px;
+}
+.type-behavioral { color: var(--accent2); border-color: rgba(26,58,92,0.25); background: rgba(26,58,92,0.06); }
+.type-product { color: var(--accent3); border-color: rgba(45,122,79,0.25); background: rgba(45,122,79,0.06); }
+.type-situational { color: var(--gold); border-color: rgba(201,146,42,0.25); background: rgba(201,146,42,0.06); }
+.type-technical { color: #7b3fc4; border-color: rgba(123,63,196,0.25); background: rgba(123,63,196,0.06); }
+
+.q-question {
+  font-size: 16px; font-weight: 700; line-height: 1.55;
+  padding: 14px 24px 0; color: var(--text);
+}
+.q-why {
+  font-size: 12px; font-family: var(--mono); color: var(--muted);
+  padding: 8px 24px 0; font-style: italic;
+}
+
+/* ANSWER SECTION */
+.q-answer-toggle {
+  display: flex; align-items: center; gap: 8px;
+  margin: 16px 24px 0;
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; font-size: 13px; font-weight: 700;
+  color: var(--muted); transition: all 0.2s;
+  width: fit-content;
+}
+.q-answer-toggle:hover { color: var(--accent); border-color: var(--accent); background: rgba(200,75,47,0.04); }
+.toggle-arrow { transition: transform 0.25s; font-size: 11px; }
+.toggle-arrow.open { transform: rotate(90deg); }
+
+.q-answer {
+  display: none;
+  margin: 12px 24px 0;
+  border-left: 3px solid var(--accent);
+  padding-left: 18px;
+}
+.q-answer.show { display: block; animation: fadeSlide 0.25s ease; }
+@keyframes fadeSlide { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+
+.answer-framework {
+  font-size: 11px; font-family: var(--mono); font-weight: 500;
+  color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.answer-body {
+  font-size: 14px; line-height: 1.75; color: #2e2a26;
+}
+.answer-body strong { color: var(--accent2); }
+.answer-body .metric { 
+  display: inline-block;
+  background: rgba(45,122,79,0.08); border: 1px solid rgba(45,122,79,0.2);
+  color: var(--accent3); border-radius: 5px; padding: 1px 7px;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+}
+.answer-body .highlight {
+  background: rgba(200,75,47,0.07); border-left: 2px solid var(--accent);
+  padding: 10px 14px; border-radius: 0 8px 8px 0;
+  margin: 10px 0; font-size: 13px;
+}
+.answer-body ul { padding-left: 18px; margin: 8px 0; }
+.answer-body ul li { margin-bottom: 6px; }
+.answer-body .do-not {
+  background: rgba(200,75,47,0.05); border: 1px solid rgba(200,75,47,0.15);
+  border-radius: 8px; padding: 10px 14px; margin-top: 12px;
+  font-size: 12px; color: var(--accent);
+}
+.answer-body .do-not::before { content: '⚠️ Do NOT say: '; font-weight: 700; }
+
+.q-divider { height: 1px; background: var(--border); margin: 16px 0 0; }
+.q-footer { padding: 12px 24px; display: flex; gap: 8px; flex-wrap: wrap; }
+.q-tag {
+  font-size: 11px; font-family: var(--mono);
+  color: var(--light); background: var(--surface2);
+  border-radius: 5px; padding: 2px 8px;
+}
+
+/* ── CHEAT SHEET ── */
+.cheat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px; margin-bottom: 28px;
+}
+.cheat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px;
+}
+.cheat-card h3 {
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.cheat-card .item {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 10px; font-size: 13px; line-height: 1.5;
+}
+.cheat-card .item .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 6px;
+}
+.cheat-card .item strong { color: var(--accent2); }
+
+/* STAR TABLE */
+.star-table {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden; margin-bottom: 24px;
+}
+.star-table table { width: 100%; border-collapse: collapse; }
+.star-table th {
+  background: var(--accent2); color: white;
+  padding: 12px 16px; font-size: 12px; font-weight: 700;
+  text-align: left; letter-spacing: 0.05em;
+}
+.star-table td {
+  padding: 12px 16px; font-size: 13px; line-height: 1.6;
+  border-bottom: 1px solid var(--border); vertical-align: top;
+}
+.star-table tr:last-child td { border-bottom: none; }
+.star-table tr:nth-child(even) td { background: var(--surface2); }
+.star-table .label { font-weight: 700; color: var(--accent); font-family: var(--mono); font-size: 12px; }
+
+/* ROUND HEADER */
+.round-header {
+  background: var(--accent2); color: white;
+  border-radius: 14px; padding: 24px 28px;
+  margin-bottom: 28px; position: relative; overflow: hidden;
+}
+.round-header::after {
+  content: attr(data-round);
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  font-size: 80px; font-weight: 900; opacity: 0.07;
+  font-family: var(--mono); line-height: 1;
+}
+.rh-tag { font-size: 11px; font-family: var(--mono); opacity: 0.6; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.rh-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+.rh-sub { font-size: 13px; opacity: 0.7; line-height: 1.5; }
+
+/* POWER MOVES */
+.power-move {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0; padding: 16px 20px;
+  margin-bottom: 14px; font-size: 14px; line-height: 1.6;
+}
+.power-move strong { color: var(--accent2); }
+.power-move .pm-label {
+  font-size: 11px; font-family: var(--mono); color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+}
+
+/* CLOSING QS */
+.closing-q {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 10px;
+  font-size: 14px; font-weight: 600; color: var(--accent2);
+  display: flex; align-items: center; gap: 12px;
+}
+.closing-q::before { content: '→'; color: var(--accent); font-weight: 900; }
+
+/* ANXIETY BUSTER */
+.anxiety-card {
+  background: linear-gradient(135deg, var(--accent2), #0d2440);
+  color: white; border-radius: 16px; padding: 28px;
+  margin-bottom: 20px;
+}
+.anxiety-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+.anxiety-item { display: flex; gap: 12px; margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+.anxiety-item .ai-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.anxiety-item strong { color: #f0a070; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 28px; margin-bottom: 28px; }
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-item::before {
+  content: ''; position: absolute; left: -24px; top: 5px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+}
+.tl-day { font-size: 11px; font-family: var(--mono); color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+.tl-task { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+/* ALERT BOX */
+.alert {
+  border-radius: 12px; padding: 16px 20px;
+  margin-bottom: 20px; font-size: 14px; line-height: 1.6;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.alert-red { background: rgba(200,75,47,0.07); border: 1px solid rgba(200,75,47,0.2); color: #8b2a14; }
+.alert-green { background: rgba(45,122,79,0.07); border: 1px solid rgba(45,122,79,0.2); color: #1a5c36; }
+.alert-blue { background: rgba(26,58,92,0.07); border: 1px solid rgba(26,58,92,0.2); color: #0d2440; }
+.alert-icon { font-size: 18px; flex-shrink: 0; }
+
+@media (max-width: 640px) {
+  .hero { padding: 32px 20px; }
+  .nav-wrap { padding: 0 12px; }
+  .main { padding: 24px 16px 60px; }
+  .tab-btn { padding: 14px 14px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🎯 Teradata APM Interview Prep · Personalized for Yashwanth</div>
+  <h1>Clear All 3 Rounds.<br><span>Zero Stutter.</span></h1>
+  <p class="hero-sub">Every question mapped to the JD. Every answer built from your real experience at MyCaptain, Aasaan App & Enigma Metaverse. Walk in knowing exactly what to say.</p>
+  <div class="hero-stats">
+    <div class="h-stat"><span>3</span> Interview Rounds</div>
+    <div class="h-stat"><span>40+</span> Questions & Model Answers</div>
+    <div class="h-stat"><span>4</span> STAR Stories Prebuilt</div>
+    <div class="h-stat"><span>1</span> Experience Gap Strategy</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('strategy')">🧭 Strategy <span class="t-num">1</span></button>
+    <button class="tab-btn" onclick="switchTab('round1')">Round 1 · HR <span class="t-num">12</span></button>
+    <button class="tab-btn" onclick="switchTab('round2')">Round 2 · PM <span class="t-num">15</span></button>
+    <button class="tab-btn" onclick="switchTab('round3')">Round 3 · Final <span class="t-num">14</span></button>
+    <button class="tab-btn" onclick="switchTab('star')">⭐ STAR Bank</button>
+    <button class="tab-btn" onclick="switchTab('close')">🏁 Close Strong</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════ STRATEGY TAB ═══════════════ -->
+<div id="panel-strategy" class="panel active">
+
+  <div class="section-label">
+    <div class="icon icon-red">🧭</div>
+    <div class="sl-text">
+      <div class="sl-overline">Before You Walk In</div>
+      <div class="sl-title">Your Master Strategy</div>
+    </div>
+  </div>
+
+  <div class="alert alert-green">
+    <div class="alert-icon">✅</div>
+    <div><strong>You are the ideal candidate.</strong> 1–3 years experience required — you have 2–3 years across 3 companies. B2B SaaS, e-commerce, EdTech — all analytics-heavy. Your metrics (21.8% churn ↓, 38% dev efficiency ↑) are exactly what Teradata's APM team wants to see. The only thing standing between you and this offer is how you tell your story.</div>
+  </div>
+
+  <div class="alert alert-blue">
+    <div class="alert-icon">🎯</div>
+    <div><strong>The One Thing to Internalize:</strong> Teradata is hiring an APM to <em>support senior PMs</em> — not to lead. Every answer should show you're a force multiplier: rigorous, structured, curious, and coachable. Don't oversell independence. Sell execution excellence + hunger to learn.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">
+    <div class="icon icon-blue">🗺️</div>
+    <div class="sl-text">
+      <div class="sl-overline">Know the Battlefield</div>
+      <div class="sl-title">Teradata Context You Must Know Cold</div>
+    </div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h3>🏢 What Teradata Does</h3>
+      <div class="item"><div class="dot"></div><div><strong>Cloud analytics & data platform for AI.</strong> Think: enterprise data warehouse + ML + AI agents in one platform.</div></div>
+      <div class="item"><div class="dot"></div><div>Product: <strong>VantageCloud</strong> — runs on AWS, Azure, GCP. Hybrid cloud.</div></div>
+      <div class="item"><div class="dot"></div><div>Key feature: <strong>ClearScape Analytics</strong> — 100+ in-database ML/analytics functions.</div></div>
+      <div class="item"><div class="dot"></div><div>New direction: <strong>Agentic AI + NLP-to-SQL</strong> — natural language queries on enterprise data.</div></div>
+      <div class="item"><div class="dot"></div><div>Customers: Top banks, telcos, retailers globally — regulated, data-sensitive enterprises.</div></div>
+    </div>
+    <div class="cheat-card">
+      <h3>📋 What This APM Role Actually Does</h3>
+      <div class="item"><div class="dot"></div><div>Build & maintain <strong>product demos</strong> for analytics/AI capabilities</div></div>
+      <div class="item"><div class="dot"></div><div>Draft <strong>PRDs, user stories, documentation</strong></div></div>
+      <div class="item"><div class="dot"></div><div>Conduct <strong>competitive research</strong> and synthesize findings</div></div>
+      <div class="item"><div class="dot"></div><div>Assist with <strong>roadmap creation and timelines</strong></div></div>
+      <div class="item"><div class="dot"></div><div>Track <strong>product usage + customer feedback</strong></div></div>
+      <div class="item"><div class="dot"></div><div>Cross-functional collaboration with <strong>Eng, Design, Analytics</strong></div></div>
+    </div>
+    <div class="cheat-card">
+      <h3>🎯 Your Unique Angles</h3>
+      <div class="item"><div class="dot"></div><div><strong>Churn reduction PM</strong>: 21.8% at Enigma — directly relevant to Teradata's analytics customers.</div></div>
+      <div class="item"><div class="dot"></div><div><strong>SaaS DNA</strong>: Aasaan App is B2B SaaS e-commerce — same buyer profile as Teradata customers.</div></div>
+      <div class="item"><div class="dot"></div><div><strong>Data-driven</strong>: You've used Mixpanel, Amplitude, GA4 — shows analytics maturity.</div></div>
+      <div class="item"><div class="dot"></div><div><strong>PRD experience</strong>: You've written PRDs (FlowState, Aasaan) — directly matches the role.</div></div>
+      <div class="item"><div class="dot"></div><div><strong>AI curiosity</strong>: FlowState Kotlin app, n8n automation, local LLMs — shows proactive AI learning.</div></div>
+    </div>
+    <div class="cheat-card">
+      <h3>⚡ Your Metrics Cheat Sheet</h3>
+      <div class="item"><div class="dot"></div><div><strong>Enigma Metaverse APM:</strong> 21.8% churn reduction, 38% dev efficiency improvement</div></div>
+      <div class="item"><div class="dot"></div><div><strong>Aasaan App Growth & Product:</strong> 46% sales efficiency lift</div></div>
+      <div class="item"><div class="dot"></div><div><strong>MyCaptain BizOps:</strong> 400% team revenue growth in 4 months</div></div>
+      <div class="item"><div class="dot"></div><div><strong>Tools:</strong> Mixpanel, Amplitude, GA4, HubSpot, Jira, Notion, Figma, n8n, Zapier</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">
+    <div class="icon icon-gold">⚠️</div>
+    <div class="sl-text">
+      <div class="sl-overline">Handle This Head-On</div>
+      <div class="sl-title">The Experience Gap Playbook</div>
+    </div>
+  </div>
+
+  <div class="anxiety-card">
+    <h3>🛡️ If They Ask About Experience Level</h3>
+    <div class="anxiety-item">
+      <div class="ai-icon">💬</div>
+      <div><strong>They might say:</strong> "This role needs someone familiar with analytics platforms — do you have direct experience with enterprise data tools?"</div>
+    </div>
+    <div class="anxiety-item">
+      <div class="ai-icon">✅</div>
+      <div><strong>You say:</strong> "I've worked with analytics infrastructure from the <em>customer side</em> — at Aasaan App, I worked directly with merchants who managed their business data on SaaS platforms, understanding their pain points with data visibility and insights. I've built fluency in analytics tools like Mixpanel, Amplitude, and GA4. What excites me about Teradata is being on the <em>platform side</em> — helping build the tools that solve those exact problems at enterprise scale. I'm also actively developing my depth: I passed your AI Proficiency Test and I've been building an Android app using structured product methodology. I'm coachable, I ship fast, and I'm genuinely passionate about this space."</div>
+    </div>
+    <div class="anxiety-item">
+      <div class="ai-icon">🔑</div>
+      <div><strong>The formula:</strong> Acknowledge → Bridge (relevant adjacent experience) → Demonstrate initiative → Express genuine enthusiasm → Close with coachability</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">
+    <div class="icon icon-green">📅</div>
+    <div class="sl-text">
+      <div class="sl-overline">48-Hour Prep Timeline</div>
+      <div class="sl-title">What to Do Before Each Round</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-day">48 HOURS BEFORE</div>
+      <div class="tl-task">Read all 3 round Q&As in this guide end-to-end</div>
+      <div class="tl-desc">Don't memorize word-for-word. Absorb the structure and key talking points. Say them out loud.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-day">24 HOURS BEFORE</div>
+      <div class="tl-task">Practice your 4 STAR stories aloud — record yourself</div>
+      <div class="tl-desc">Listen back. Cut filler words. Each story should be under 2.5 minutes. Check your metrics are memorized cold.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-day">MORNING OF</div>
+      <div class="tl-task">Read Teradata's latest news + re-read the JD</div>
+      <div class="tl-desc">Check teradata.com/newsroom. Know 1 recent product announcement. Re-read the JD and mentally map each bullet to your experience.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-day">30 MIN BEFORE</div>
+      <div class="tl-task">Review your metrics cheat sheet + closing questions</div>
+      <div class="tl-desc">Have your 5 closing questions ready. Deep breath. You've done the work.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ ROUND 1: HR ═══════════════ -->
+<div id="panel-round1" class="panel">
+
+  <div class="round-header" data-round="R1">
+    <div class="rh-tag">Round 1 · HR Screen · 30–45 minutes</div>
+    <div class="rh-title">Cultural Fit, Motivation & Background</div>
+    <div class="rh-sub">Goal: Show you're the right person, not just the right resume. HR is screening for culture fit, genuine interest in Teradata, and communication quality.</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <span class="q-type-badge type-behavioral">Behavioral</span>
+    </div>
+    <div class="q-question">"Tell me about yourself."</div>
+    <div class="q-why">⚡ This IS the most important question. The first 90 seconds set the entire tone. Do not ramble.</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Present → Past → Future (60 seconds max)</div>
+      <div class="answer-body">
+        "I'm Yashwanth, an Associate Product Manager with about 2–3 years of experience across B2B SaaS, EdTech, and e-commerce platforms. <strong>Currently</strong>, I'm at Enigma Metaverse as an APM, where I've been working on user retention — I led an initiative that reduced churn by <span class="metric">21.8%</span> through structured cohort analysis and product improvements. <strong>Before that</strong>, at Aasaan App, I worked in Growth and Product Analytics, driving a <span class="metric">46% improvement in sales efficiency</span> for our merchant customers — which gave me strong exposure to how data informs product decisions in a SaaS context. And at MyCaptain, I was in business operations, where I helped scale team revenue by <span class="metric">400% in 4 months</span>, which gave me a real foundation in metrics, cross-functional execution, and customer understanding. <strong>Looking forward</strong>, I want to grow into a full PM role in an AI-native analytics platform — which is exactly what drew me to Teradata. The combination of enterprise-scale data, AI capabilities like ClearScape Analytics, and the agentic AI direction you're pursuing — that's where I want to build the next chapter of my career."
+        <div class="do-not">"I've always been passionate about products since childhood..." — skip the origin story.</div>
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer">
+      <span class="q-tag">opening</span><span class="q-tag">narrative</span><span class="q-tag">metrics</span>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <span class="q-type-badge type-behavioral">Behavioral</span>
+    </div>
+    <div class="q-question">"Why Teradata? Why this specific role?"</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Specific → Personal → Forward</div>
+      <div class="answer-body">
+        "Three specific reasons. First, <strong>the problem space is genuinely hard and important</strong> — helping enterprise organizations turn petabyte-scale data into decisions is a problem that matters, and Teradata's in-database analytics approach, especially ClearScape Analytics, is technically differentiated in a way I respect. Second, <strong>the timing of this role</strong> — you're shifting to agentic AI and NLP-driven interfaces, and I want to be part of building that from the ground up, not joining after the work is done. Third, <strong>personal fit with the APM function</strong> — I've read the JD carefully. Supporting senior PMs with PRDs, competitive research, product demos, and usage tracking — that's not a downgrade for me, it's exactly the structured learning environment I want. I passed your AI Proficiency Test and I've been proactively studying your platform to understand where I can add value immediately."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">motivation</span><span class="q-tag">research</span></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <span class="q-type-badge type-behavioral">Behavioral</span>
+    </div>
+    <div class="q-question">"Walk me through a time you had to work with data to make a product decision."</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: STAR — use Enigma churn story</div>
+      <div class="answer-body">
+        "<strong>Situation:</strong> At Enigma Metaverse, we were seeing user churn accelerate — about 3 months after I joined, we noticed month-2 retention had dropped significantly but we didn't know why. <strong>Task:</strong> As the APM, I was given responsibility to investigate and propose a product fix. <strong>Action:</strong> I pulled cohort data from Mixpanel, segmented by user type, onboarding path, and feature adoption. I found that users who didn't complete 3 core actions in their first week had <span class="metric">4× higher churn probability</span>. I cross-referenced with support tickets to understand friction points. I then drafted a PRD for a revised onboarding flow with progressive milestones, worked with design on a lighter-touch version we could ship in 2 sprints, and set up tracking to measure impact. <strong>Result:</strong> Over the next 90 days, we saw <span class="metric">21.8% churn reduction</span> in the cohorts that went through the new onboarding vs. the old one. That experience taught me that the most important product decisions happen between the data and the customer conversation — you need both."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">data-driven</span><span class="q-tag">STAR</span><span class="q-tag">retention</span></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <span class="q-type-badge type-behavioral">Behavioral</span>
+    </div>
+    <div class="q-question">"Tell me about a time you worked cross-functionally and faced a disagreement."</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: STAR — show maturity, not drama</div>
+      <div class="answer-body">
+        "<strong>Situation:</strong> At Aasaan App, I was working with the engineering team on a feature that would improve merchant dashboard load time. I had recommended prioritizing this based on user feedback and analytics data showing it was a top complaint. <strong>Task:</strong> The engineering lead pushed back, arguing the team was already committed to other sprint work and this wasn't technically 'critical.' <strong>Action:</strong> Instead of escalating, I set up a 30-minute working session. I brought the data — specifically, that <span class="metric">users who hit the slow load more than 3× per session had 2× higher drop-off</span>. I also acknowledged his constraint: I asked what a minimal version would look like that wouldn't derail the sprint plan. Together, we scoped a 2-day optimization that captured 70% of the benefit. <strong>Result:</strong> We shipped it, load time dropped, and the feedback from merchants was immediate. The bigger win was the relationship — after that, the engineering lead came to me proactively when he saw product-impacting issues. Cross-functional trust is built in those difficult moments."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">cross-functional</span><span class="q-tag">conflict</span><span class="q-tag">influence</span></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <span class="q-type-badge type-behavioral">Behavioral</span>
+    </div>
+    <div class="q-question">"Where do you see yourself in 3 years?"</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Ambition + Alignment + Humility</div>
+      <div class="answer-body">
+        "In 3 years, I see myself as a full Product Manager with ownership of a defined product area — ideally within Teradata's analytics or AI experience layer. I want to have gone from supporting senior PMs to leading a product initiative end-to-end: owning the roadmap, the customer conversations, the launch, and the post-launch iteration. More specifically, I'm excited about the direction of agentic AI and NLP-driven interfaces — I want to be someone who deeply understands both the enterprise user and the underlying technology, so I can make product decisions that are both user-centered and technically credible. I'm not in a rush — I know the APM role is where I need to earn that responsibility, and I'm committed to doing that work well."
+        <div class="do-not">"I want to be a CPO" or "I want to start my own company." — save the long-term ambition for coffee chats, not HR screens.</div>
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">growth</span><span class="q-tag">alignment</span></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <span class="q-type-badge type-behavioral">Behavioral</span>
+    </div>
+    <div class="q-question">"What's your biggest weakness?"</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Real weakness + Active mitigation + Improvement evidence</div>
+      <div class="answer-body">
+        "Honestly, I can sometimes go too deep into data analysis before moving to action — I want to make sure I have the full picture before I commit to a direction. In fast-moving sprint environments, this has occasionally meant I needed to make faster judgment calls than I was comfortable with. I've been actively working on this: I've started using explicit timebox rules for myself — if I'm spending more than 2 hours on an analysis and haven't reached a 'good enough to act' threshold, I surface what I have with confidence levels attached, rather than waiting for certainty. It's made me faster and actually more credible with stakeholders, because I show my reasoning rather than just the conclusion."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">self-awareness</span><span class="q-tag">growth</span></div>
+  </div>
+
+  <!-- Q7-12 compact -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q7–12</span><span class="q-type-badge type-behavioral">Behavioral · Rapid Fire</span></div>
+    <div class="q-question">Additional HR questions — click each for the model answer.</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show All Rapid-Fire Answers</button>
+    <div class="q-answer">
+      <div class="answer-body">
+        <div class="highlight"><strong>Q7: "How do you handle ambiguity?"</strong><br>"I treat ambiguity as a research problem. At Enigma, I was given the goal of 'improve engagement' with no defined scope. First thing I did was define what engagement meant in our context — I wrote a one-pager proposing 3 candidate metrics and got alignment before writing a single line of requirement. Structure first, execution second."</div>
+
+        <div class="highlight"><strong>Q8: "Describe your experience with documentation and PRDs."</strong><br>"At Enigma, I owned the PRD process end-to-end — problem statement, user stories, acceptance criteria, success metrics. I've also written detailed technical documentation for developer workflows. For Aasaan, I created structured competitive analysis summaries that fed directly into roadmap discussions. Documentation is how I create shared understanding in a team — I take it seriously."</div>
+
+        <div class="highlight"><strong>Q9: "Are you comfortable with SQL or data tools?"</strong><br>"Yes, I'm comfortable with SQL for querying and analysis — I've used it for product analytics work. I've also worked extensively with Mixpanel, Amplitude, and GA4. I'm continuing to build my Python skills for more advanced analysis. I'd rate myself a strong SQL practitioner and intermediate on Python."</div>
+
+        <div class="highlight"><strong>Q10: "Tell me about your experience with competitive research."</strong><br>"At Aasaan App, competitive research was a regular responsibility — I mapped competitors' features, pricing, and positioning monthly. I developed a structured template: feature parity matrix, differentiation gaps, and 3 strategic implications per report. Senior PMs told me my summaries were the most actionable they'd seen — that's the standard I hold myself to."</div>
+
+        <div class="highlight"><strong>Q11: "Why are you leaving your current role?"</strong><br>"I've genuinely valued my time at Enigma — the churn work especially has been high-impact. But I'm ready for a platform that's larger in scope, more technically sophisticated, and where I can grow faster under experienced senior PMs. Teradata's scale and the direction you're building toward — that's the environment where I'll develop the fastest."</div>
+
+        <div class="highlight"><strong>Q12: "What do you know about our product?"</strong><br>"Teradata Vantage is a multi-cloud analytics and data platform — runs on AWS, Azure, GCP. The core differentiation is in-database analytics via ClearScape Analytics, which eliminates data movement for ML workloads. Your current strategic pivot is toward agentic AI — NLP-driven query interfaces, persona-based UX, and AI agents that can plan and act on user behalf. The UX strategy is addressing 'UI sprawl' across the platform. That's where the APM team's work is most critical right now."</div>
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">rapid-fire</span><span class="q-tag">HR</span></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ ROUND 2: PM ═══════════════ -->
+<div id="panel-round2" class="panel">
+
+  <div class="round-header" data-round="R2">
+    <div class="rh-tag">Round 2 · PM Panel · 60 minutes</div>
+    <div class="rh-title">Product Thinking, Execution & Analytics</div>
+    <div class="rh-sub">Goal: Prove you can think like a PM. Structure your thinking out loud. Show product instinct backed by data. Senior PMs are assessing: can I trust this person to support my roadmap?</div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-icon">🔑</div>
+    <div><strong>Key Principle:</strong> Always think out loud. Say "Let me structure this..." before answering product questions. Interviewers value your thinking process more than your final answer.</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q1</span><span class="q-type-badge type-product">Product Thinking</span></div>
+    <div class="q-question">"Walk me through how you would write a user story for a new feature on our analytics platform."</div>
+    <div class="q-why">⚡ This tests documentation skill — a core APM responsibility per the JD.</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Template → Example → Success Criteria</div>
+      <div class="answer-body">
+        "I follow the standard user story format: <strong>'As a [persona], I want to [action] so that [outcome].'</strong> But I always add three things that make it actually useful for engineering: acceptance criteria, edge cases, and success metrics.<br><br>
+        Let me give you a live example relevant to Teradata. Say we're building a natural language query feature:<br><br>
+        <div class="highlight"><strong>User Story:</strong> As a business analyst who doesn't write SQL, I want to type a question in plain English and see a data result, so that I can get answers from my data without waiting for a data engineer.<br><br><strong>Acceptance Criteria:</strong><br>• The system interprets the query and generates a SQL statement<br>• The SQL is displayed alongside the result so the analyst can verify logic<br>• If the query is ambiguous, 2–3 clarifying options are surfaced before execution<br>• Query executes within 5 seconds for datasets under 100GB<br><br><strong>Edge Cases:</strong> Vague queries like 'How are we doing?' should surface disambiguation options, not guess. Queries on restricted tables should return a permission error, not empty results.<br><br><strong>Success Metric:</strong> % of queries completed without manual SQL correction within 30 days of launch.</div>
+        The key discipline: the story isn't done until you can answer 'how will we know this is working?' — that's the success metric, and it should be defined before a single line of code is written."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">PRD</span><span class="q-tag">user-stories</span><span class="q-tag">documentation</span></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q2</span><span class="q-type-badge type-product">Product Thinking</span></div>
+    <div class="q-question">"How would you conduct competitive research on a data analytics platform? Walk me through your process."</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Structured 5-step process</div>
+      <div class="answer-body">
+        "I approach competitive research in 5 layers:<br><br>
+        <strong>1. Define scope:</strong> What specific question is this research answering? (e.g., 'How do competitors handle NLP-to-SQL for non-technical users?' is better than 'research competitors.') At Aasaan, I always started with the strategic question before touching the research.<br><br>
+        <strong>2. Map the competitive set:</strong> Direct competitors (Snowflake, Databricks, AWS Redshift), indirect competitors (Power BI, Tableau), and emerging threats (AI-native entrants like Hex, ThoughtSpot). I don't limit to just the obvious names.<br><br>
+        <strong>3. Data sources:</strong> Product websites and changelogs, G2/Gartner Peer Insights reviews (users reveal what competitors do well and poorly), LinkedIn job postings (tells you where they're investing), earnings calls (strategic direction), and direct trial/demo of the product where possible.<br><br>
+        <strong>4. Structure the output:</strong> Feature parity matrix + differentiator gaps + 3 'so what' strategic implications for our roadmap. Not just what they have — but what it means for us.<br><br>
+        <strong>5. Keep it living:</strong> Competitive landscape changes fast. I set up Google Alerts and product changelog subscriptions so I'm updating the document monthly, not just at project kickoff.<br><br>
+        For Teradata specifically, I've already been tracking how Snowflake Cortex and Databricks' natural language features compare to ClearScape Analytics — I'd be ready to contribute to that immediately."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">competitive-research</span><span class="q-tag">process</span></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q3</span><span class="q-type-badge type-situational">Situational</span></div>
+    <div class="q-question">"A senior PM asks you to track product usage for a new analytics feature and identify improvement opportunities. How do you approach this?"</div>
+    <div class="q-why">⚡ Directly from the JD: "Track product usage and gather customer feedback to identify improvement opportunities."</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Clarify → Instrument → Analyze → Synthesize → Recommend</div>
+      <div class="answer-body">
+        "Before I start pulling data, I'd clarify three things: <strong>What does 'usage' mean for this feature?</strong> (sessions? actions taken? outcomes achieved?), <strong>What's the time window?</strong>, and <strong>What decisions will this data inform?</strong><br><br>
+        Then I'd work through 5 steps:<br><br>
+        <strong>Step 1 – Define metrics:</strong> Adoption rate (% of eligible users who tried the feature), activation rate (% who completed a meaningful action), retention (did they come back?), error rate (how often did it fail?), and time-to-value (how long from first use to first meaningful output?).<br><br>
+        <strong>Step 2 – Instrument:</strong> Confirm event tracking is set up correctly in the analytics tool. At Enigma I caught several tracking gaps that were making our reports misleading — verifying instrumentation is step zero.<br><br>
+        <strong>Step 3 – Cohort analysis:</strong> Segment users by persona, onboarding path, and tenure. Patterns that appear in aggregates often disappear or reverse at segment level.<br><br>
+        <strong>Step 4 – Qualitative triangulation:</strong> Pull 5–10 support tickets related to the feature. Run a quick survey or 3 user interviews. Data tells you <em>what</em> is happening; users tell you <em>why</em>.<br><br>
+        <strong>Step 5 – Synthesize into a 1-page brief:</strong> What are the top 3 improvement opportunities, what data supports each, and what's my recommended next action?<br><br>
+        I'd share a draft with the senior PM before finalizing — their domain context will sharpen the 'so what' significantly."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">analytics</span><span class="q-tag">product-metrics</span><span class="q-tag">JD-direct</span></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q4</span><span class="q-type-badge type-product">Product Thinking</span></div>
+    <div class="q-question">"How would you prioritize 5 feature requests from different customers for a quarterly roadmap?"</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: RICE + Strategic filter</div>
+      <div class="answer-body">
+        "I'd use a two-stage approach: <strong>quantitative scoring + strategic filter.</strong><br><br>
+        <strong>Stage 1 – RICE scoring:</strong><br>
+        • <strong>Reach:</strong> How many customers/users does this affect? (not just the one who asked)<br>
+        • <strong>Impact:</strong> How significantly does it improve their core job? (1–3 scale)<br>
+        • <strong>Confidence:</strong> How validated is this need? (just one customer request vs. pattern across 10?)<br>
+        • <strong>Effort:</strong> Engineering estimate in sprints<br>
+        RICE = (Reach × Impact × Confidence) ÷ Effort → gives a comparable score<br><br>
+        <strong>Stage 2 – Strategic filter:</strong> Before finalizing, I check each high-scoring item against: Does this advance our platform's AI/analytics direction? Does it help with customer retention risk? Is there a commitment to a key account?<br><br>
+        <strong>What I'd NOT do:</strong> prioritize by whoever asked loudest, or by which customer is biggest if the feature only helps them. One customer's urgent request shouldn't derail platform-level work.<br><br>
+        Then I'd put the ranked list in front of the senior PM with my reasoning visible — they'll override some decisions, and that's fine. My job is to make the best-reasoned recommendation, not to make the final call."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">prioritization</span><span class="q-tag">RICE</span><span class="q-tag">roadmap</span></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q5</span><span class="q-type-badge type-product">Product Thinking</span></div>
+    <div class="q-question">"What makes a great product demo, and how would you build one for Teradata's analytics capabilities?"</div>
+    <div class="q-why">⚡ Directly from JD: "Support senior PMs in building and maintaining product demos."</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Audience → Story → Evidence → Call to Action</div>
+      <div class="answer-body">
+        "A great demo isn't a feature tour — it's a <strong>story where the customer is the hero and the product is their superpower.</strong><br><br>
+        For a Teradata analytics demo, I'd build it in 4 layers:<br><br>
+        <strong>1. Audience-first:</strong> Before building anything, I'd ask — who is this demo for? A data engineer wants to see query performance and integration depth. A CFO wants to see the insight that saved money. The same product needs a different narrative for each persona. For a Teradata ClearScape demo to a financial services customer, I'd open with: 'Here's a question your risk team is probably waiting 3 days to answer — watch us answer it in 30 seconds.'<br><br>
+        <strong>2. Realistic data:</strong> Demos fail when they use fake, clean data that nobody believes. I'd work with the team to use anonymized or synthetic data that mirrors a real customer's data structure and complexity.<br><br>
+        <strong>3. 'Oh wow' moment:</strong> Every demo needs one moment where the audience leans forward. For Teradata, that's likely the NLP query — someone types a natural language question and gets a perfect SQL result and chart instantly.<br><br>
+        <strong>4. Maintain it like a product:</strong> Demos break. API changes, UI updates, data drift. I'd build a maintenance checklist and run through the demo weekly to catch breaks before a live customer session."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">demos</span><span class="q-tag">JD-direct</span><span class="q-tag">storytelling</span></div>
+  </div>
+
+  <!-- Q6-Q10 rapid fire PM -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q6–15</span><span class="q-type-badge type-product">Product · Rapid Fire</span></div>
+    <div class="q-question">Additional PM round questions — all mapped to the JD.</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show All</button>
+    <div class="q-answer">
+      <div class="answer-body">
+        <div class="highlight"><strong>Q6: "What metrics would you use to measure the success of an AI-powered analytics feature?"</strong><br>"I'd measure across 3 levels: <strong>Adoption</strong> (% of target users who tried it in 30 days), <strong>Activation</strong> (% who completed a meaningful outcome — e.g., answered a business question without needing manual SQL correction), and <strong>Business value</strong> (time-to-insight reduction vs. baseline, and whether it correlated with renewal/expansion behavior). I'd also track AI-specific health: query success rate, error rate, and user override rate (how often did users edit the AI output)."</div>
+
+        <div class="highlight"><strong>Q7: "How do you gather customer feedback effectively?"</strong><br>"Mixed methods: quantitative (usage analytics, in-app surveys with NPS and micro-surveys at specific feature moments, support ticket analysis) + qualitative (customer interviews — 30 mins, bi-weekly if possible, focusing on jobs-to-be-done not feature requests). I prioritize talking directly to the user who does the work, not just the economic buyer. At Aasaan, I ran weekly 20-min calls with merchants — those conversations shaped our roadmap more than any analytics report."</div>
+
+        <div class="highlight"><strong>Q8: "What data visualization tools have you used and how?"</strong><br>"I've worked with GA4, Amplitude, and Mixpanel for product analytics — building funnel charts, retention curves, and cohort heatmaps. For business reporting, I've built dashboards in Google Looker Studio and have exposure to Tableau. For data exploration, I use Python with matplotlib/seaborn for quick analysis. I understand the difference between a dashboard for a daily user and a report for an executive — they need very different information architectures."</div>
+
+        <div class="highlight"><strong>Q9: "Walk me through how you'd build a product roadmap for a quarter."</strong><br>"Four steps: (1) <strong>Input gathering</strong> — customer feedback, sales requests, support ticket themes, engineering constraints, and strategic company priorities. (2) <strong>Prioritization</strong> — RICE scoring + strategic fit filter, reviewed with the senior PM. (3) <strong>Capacity mapping</strong> — convert prioritized items to sprint estimates, map to team capacity, identify dependencies. (4) <strong>Communication</strong> — produce a 1-page visual roadmap with 'committed / planned / exploratory' confidence bands. Stakeholders need to trust the roadmap, which means being honest about what's certain vs. directional."</div>
+
+        <div class="highlight"><strong>Q10: "How do you handle a situation where engineering says a feature will take 3× longer than expected?"</strong><br>"First I listen — engineering estimates that expand usually reveal a complexity the PM didn't fully understand. I'd ask: what specifically is driving the complexity? Is it a new discovery, or was the original estimate too optimistic? Then I'd look at 3 options: (1) Descope — can we ship an MVP that delivers 70% of the value in 30% of the time? (2) Delay — is there a natural deadline that allows more time? (3) Re-prioritize — does this change the feature's RICE score and should something else take its slot? I'd present these options to the senior PM with a recommendation, not just the problem."</div>
+
+        <div class="highlight"><strong>Q11: "What's the difference between a product requirement and a user story?"</strong><br>"A product requirement defines <em>what the system must do</em> (functional and non-functional specifications). A user story defines <em>why a user needs it and what outcome it delivers</em> — in the user's voice. User stories are a subset of requirements, written from a user-centered perspective. I prefer to write requirements as user stories first, then add technical specs and acceptance criteria — it keeps the team anchored on user value even during detailed implementation decisions."</div>
+
+        <div class="highlight"><strong>Q12: "How do you approach building a product demo from scratch when you're new to the platform?"</strong><br>"I'd start by becoming a power user — 2 weeks of hands-on exploration, reading documentation, attending any existing demos, and talking to the CS/Sales team about what moments land best with customers. Then I'd pick one specific customer persona and one specific job they need to do — and build the entire demo around completing that job. I'd do a dry run with an internal stakeholder before touching a real customer. And I'd document every setup step so the next person can maintain it without me."</div>
+
+        <div class="highlight"><strong>Q13: "What's your understanding of agile and how have you worked in agile teams?"</strong><br>"Agile is an iterative product development methodology — we work in short cycles (sprints, usually 2 weeks), prioritize working software over documentation, and respond to change over following a fixed plan. In practice at Enigma: I participated in sprint planning, wrote and refined user stories in Jira, attended daily standups, and facilitated retrospectives. The most valuable skill I've developed in agile is writing acceptance criteria precisely enough that QA can test without asking me follow-up questions."</div>
+
+        <div class="highlight"><strong>Q14: "How would you explain a complex analytics concept to a non-technical stakeholder?"</strong><br>"I use three techniques: (1) <strong>Analogy</strong> — compare it to something they already understand. For cohort retention, I'd say 'imagine you opened a restaurant — cohort analysis tells you whether the customers who came in January are still coming in July.' (2) <strong>Outcome first</strong> — lead with what this means for their decision, not how it works. (3) <strong>Visual</strong> — a simple chart almost always beats a paragraph. I'd always check comprehension by asking 'does this change how you'd think about X?' not just 'does that make sense?'"</div>
+
+        <div class="highlight"><strong>Q15: "Describe a time you identified an improvement opportunity from product usage data."</strong><br>"At Enigma, I was reviewing our feature funnel data and noticed that 60% of users opened a specific advanced setting screen but only 12% changed any setting. That's a big drop-off that suggested users were curious but confused. I dug into support tickets and found several complaints about that screen being 'overwhelming.' I proposed a progressive disclosure redesign — show the 3 most-used settings by default, and hide advanced options behind an 'expand' toggle. After shipping, engagement with settings increased by <span class='metric'>34%</span> and related support tickets dropped by roughly half."</div>
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">rapid-fire</span><span class="q-tag">PM-panel</span></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ ROUND 3: FINAL ═══════════════ -->
+<div id="panel-round3" class="panel">
+
+  <div class="round-header" data-round="R3">
+    <div class="rh-tag">Round 3 · Final · Senior PM or Director · 45–60 minutes</div>
+    <div class="rh-title">Strategic Thinking, Judgment & Culture</div>
+    <div class="rh-sub">Goal: This is where they decide between you and 1–2 other candidates. Show strategic thinking, ownership mindset, and intellectual depth. This round separates APMs from coordinators.</div>
+  </div>
+
+  <div class="alert alert-blue">
+    <div class="alert-icon">💡</div>
+    <div><strong>Round 3 mindset shift:</strong> Stop trying to give the "right" answer. Start demonstrating how you <em>think</em>. Opinionated, well-reasoned responses beat safe, generic ones at this stage.</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q1</span><span class="q-type-badge type-situational">Case Study</span></div>
+    <div class="q-question">"If you were to improve one thing about Teradata's current product experience, what would it be and why?"</div>
+    <div class="q-why">⚡ This tests research depth, product intuition, and courage to have an opinion. Do NOT say "I haven't used the product enough to say."</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Observation → Hypothesis → Solution → Trade-offs</div>
+      <div class="answer-body">
+        "Based on my research, the area I'd focus on is <strong>the onboarding experience for new analysts on VantageCloud.</strong><br><br>
+        The observation: Teradata has acknowledged the 'UI sprawl' problem publicly — multiple tools, different interaction patterns, high cognitive load for new users. Even with strong platform capabilities, if the first 7 days are confusing, customers don't get to the 'aha moment' that drives deep adoption and renewal.<br><br>
+        My hypothesis: New data analysts on VantageCloud spend their first week figuring out navigation rather than getting answers from their data. That's lost time-to-value — and in enterprise SaaS, slow TTV is a retention risk.<br><br>
+        What I'd build: A <strong>persona-driven first-run experience</strong> — when you first log in, the platform asks 2–3 questions about your role and your primary goal (e.g., 'I want to analyze customer transactions'), and then serves a tailored starting point: the relevant tables, a sample query in plain language, and one pre-built dashboard relevant to your use case. Not a feature tour — a guided first win.<br><br>
+        Trade-offs I'd acknowledge: This requires good metadata and sample data governance. It adds maintenance overhead per persona. And it needs to be tested carefully to avoid feeling patronizing to power users — the answer is making it skippable but surfacing it prominently for new accounts.<br><br>
+        I'd measure success by: time-to-first-meaningful-query for new users, and 30-day feature activation rate."
+        <div class="do-not">"I'm not sure yet, I'd need to use the product more." — You've done enough research. Have an opinion.</div>
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">product-critique</span><span class="q-tag">strategic</span><span class="q-tag">onboarding</span></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q2</span><span class="q-type-badge type-situational">Case Study</span></div>
+    <div class="q-question">"A senior PM asks you to own the competitive research for our NLP-to-SQL feature against Snowflake Cortex and ThoughtSpot. You have 1 week. What do you deliver?"</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Structure → Sources → Output Format → Strategic Implications</div>
+      <div class="answer-body">
+        "I'd deliver a <strong>4-section competitive brief</strong>, structured for a PM audience — not a feature list dump.<br><br>
+        <strong>Section 1: Feature Parity Matrix</strong> — What can each platform do? NLP query support, supported data sources, query editing UX, how ambiguous queries are handled, accuracy benchmarks if available.<br><br>
+        <strong>Section 2: UX Teardown</strong> — I'd trial Snowflake Cortex Analyst and ThoughtSpot's search interface myself. Document the exact user journey, screenshot it, note what delights vs. frustrates. This is qualitative but essential — G2 reviews from actual users would supplement my own testing.<br><br>
+        <strong>Section 3: Positioning Gap Analysis</strong> — Where are we stronger? (In-database execution, enterprise governance, hybrid cloud.) Where are we weaker? (Consumer awareness, NLP accuracy perception.) What are competitors claiming we can't do?<br><br>
+        <strong>Section 4: 3 Strategic Implications</strong> — The 'so what.' E.g.: 'ThoughtSpot is marketing to the self-serve analyst persona — if we don't address this ICP gap, we risk losing deals at mid-market companies where analysts have more buying influence.' Each implication links to a specific roadmap or positioning recommendation.<br><br>
+        Deliverable format: 6-slide deck for the PM, plus a living Notion document with the raw findings that stays up-to-date. I'd present it before the end of the week and ask for 30 minutes to walk through the 3 strategic implications together."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">competitive-intel</span><span class="q-tag">execution</span><span class="q-tag">strategic</span></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q3</span><span class="q-type-badge type-situational">Judgment</span></div>
+    <div class="q-question">"You're supporting a senior PM who disagrees with your analysis. You believe your data is right. What do you do?"</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show Model Answer</button>
+    <div class="q-answer">
+      <div class="answer-framework">Framework: Disagree and commit — with the right sequence</div>
+      <div class="answer-body">
+        "I'd follow a 'disagree → understand → decide → commit' sequence.<br><br>
+        <strong>First, I make sure I actually understand their disagreement.</strong> 'Can you help me understand what in the data you're seeing differently, or is it more about the conclusion I'm drawing?' Sometimes what looks like a data disagreement is actually a disagreement about assumptions — and those are important to surface.<br><br>
+        <strong>Second, I present my reasoning one more time — clearly and concisely</strong>, with the specific data point that leads me to my conclusion. Not arguing. Presenting.<br><br>
+        <strong>Third, if we still disagree after that conversation, I defer and commit.</strong> They have more context — about the customer, about the strategic context, about what I might not know yet. I'd say: 'I want to note my concern for the record, and I'd love to track this with data after we ship — but I'm fully aligned with moving forward with your direction.'<br><br>
+        <strong>Fourth, I set up the measurement.</strong> If I think the data points one way and we went the other, I make sure we have the instrumentation to learn who was right — not to win an argument, but because that's how both of us get better.<br><br>
+        Being a great APM means being the PM's force multiplier, not their critic. You earn the right to be heard more by being right on the small things, consistently, over time."
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">judgment</span><span class="q-tag">stakeholder</span><span class="q-tag">maturity</span></div>
+  </div>
+
+  <!-- Q4-Q14 rapid fire Final Round -->
+  <div class="q-card">
+    <div class="q-header"><span class="q-num-badge">Q4–14</span><span class="q-type-badge type-situational">Final Round · Strategic Qs</span></div>
+    <div class="q-question">Senior PM / Director level questions — strategic judgment required.</div>
+    <button class="q-answer-toggle" onclick="toggleAnswer(this)"><span class="toggle-arrow">▶</span> Show All</button>
+    <div class="q-answer">
+      <div class="answer-body">
+        <div class="highlight"><strong>Q4: "How do you think about the difference between what customers say they want vs. what they actually need?"</strong><br>"Henry Ford's quote: 'If I had asked people what they wanted, they would have said faster horses.' Customers describe problems in terms of solutions they already know. My job is to listen for the underlying job-to-be-done: <em>what outcome are they trying to achieve?</em> At Aasaan, merchants would ask for 'more chart types' — but what they needed was faster time to understand whether sales were up or down. That's a very different feature to build. I always ask: 'What would you do differently if you had this feature?' That question usually reveals the real need."</div>
+
+        <div class="highlight"><strong>Q5: "What do you think is the biggest challenge for enterprise analytics platforms right now?"</strong><br>"The trust gap between AI output and enterprise decision-makers. It's not a technical problem anymore — models are capable enough. The challenge is that data analysts and executives in regulated industries (finance, healthcare) can't use AI-generated insights if they can't audit how the AI got there. The winning platform won't just have the most accurate AI — it'll have the most transparent AI. Explainability, audit trails, and confidence signals built directly into the UX. That's the product challenge I find most interesting about Teradata's current direction."</div>
+
+        <div class="highlight"><strong>Q6: "How do you balance speed of shipping with quality?"</strong><br>"Context-dependent. For a new feature in a low-stakes area — move fast, accept rough edges, ship, learn. For anything touching enterprise customer data pipelines or compliance — quality is non-negotiable and speed is secondary. I've learned to ask two questions before any launch: 'What's the worst thing that happens if this breaks?' and 'Who finds out first?' Those answers calibrate how much quality investment is justified."</div>
+
+        <div class="highlight"><strong>Q7: "What would you do in your first 30 days at Teradata?"</strong><br>"<strong>Week 1:</strong> Listen and learn. Read every PRD, research doc, and roadmap item I can access. Map the team structure and understand who owns what. <strong>Week 2:</strong> Start contributing — pick up the smallest, clearest tasks. Deliver one thing well before taking on anything complex. <strong>Week 3–4:</strong> Begin building my own context: trial the product as an analyst persona, compile a competitive snapshot on one specific feature, and have 1:1s with CS, Sales, and at least one customer if possible. By day 30, I want to have one concrete output the senior PM can use — and a clear picture of where I can add the most value in Q2."</div>
+
+        <div class="highlight"><strong>Q8: "Tell me about a product you use daily and what you'd improve about it."</strong><br>"Notion — I use it constantly. The thing I'd improve is the 'new page' experience. When you hit 'New page,' you start from a completely blank canvas with a cursor. For 90% of use cases, users have a category in mind — meeting notes, project brief, personal journal. I'd add a contextual template suggestion: a lightweight overlay that shows 3–5 suggested templates based on where in your workspace you are, that can be dismissed in one click. The 'aha moment' for Notion is when your workspace starts feeling like a second brain — but the blank page is the biggest barrier to building that habit. Reduce the setup cost of each new page and you increase the velocity of thought capture."</div>
+
+        <div class="highlight"><strong>Q9: "How would you measure whether our product roadmap is working?"</strong><br>"Three levels: (1) <strong>Output</strong>: Are we shipping what we planned, on time? (2) <strong>Outcome</strong>: Are the shipped features achieving their defined success metrics? Adoption, retention, time-to-value. (3) <strong>Impact</strong>: Are we moving the needle on company-level metrics — NRR (net revenue retention), customer health scores, expansion revenue? A roadmap that ships on time but doesn't move outcomes is a project plan, not a product strategy. The third level — impact — is the one that matters for a Teradata senior PM's bonus."</div>
+
+        <div class="highlight"><strong>Q10: "Describe a failure in your product work and what you learned."</strong><br>"At Aasaan, I built a feature specification for a merchant bulk upload tool based primarily on a request from one large merchant. I didn't validate the need across a broader user sample before committing engineering time. The feature shipped, and adoption was about 15% of what we expected — turns out the large merchant's workflow was unusual, and most merchants didn't have the data volume that made bulk upload valuable. The lesson: one loud customer voice is a hypothesis, not a requirement. I now require at least 3 independent sources — usage data, tickets, and interviews — before I'll commit engineering resources to a feature."</div>
+
+        <div class="highlight"><strong>Q11: "How do you stay current on AI trends relevant to product management?"</strong><br>"Three sources I rely on: (1) Primary — I build things. I run n8n workflows, I've set up local LLM inference with Ollama, I built a full Android app using Jetpack Compose. Hands-on beats reading. (2) Curated reading — I follow Lenny's Newsletter, Reforge content, and Anthropic/OpenAI research blogs. (3) Community — I participate in APM communities and follow PMs at AI-native companies on LinkedIn. For Teradata specifically, I've been tracking your ClearScape Analytics changelogs and the analyst commentary around your agentic AI pivot. Staying current is a discipline, not a hobby."</div>
+
+        <div class="highlight"><strong>Q12: "What questions do you ask when you receive a feature request?"</strong><br>"Five questions, always: (1) Who is experiencing this problem, and how many of them? (2) How are they solving it today without this feature? (3) What does success look like — what would they do differently if this existed? (4) How urgent is this? What happens if we ship it in 3 months vs. 3 weeks? (5) Is this a symptom of a deeper underlying problem? The last question is the most important — sometimes a 'feature request' is actually the user's best guess at a solution to a problem we should solve differently."</div>
+
+        <div class="highlight"><strong>Q13: "What does good look like for an APM 6 months in?"</strong><br>"Six months in, good looks like: (1) I'm trusted to own small scopes end-to-end — a user story, a research brief, a demo maintenance cycle — without the senior PM needing to check my work. (2) I'm adding context the senior PM doesn't have — I know the customer feedback better, I know the competitive landscape better, I know the usage data better. (3) I'm proactively flagging risks before they become problems. (4) I've built relationships across engineering and design — people message me directly because they know I'll be useful, not a blocker. That's the APM I want to be 6 months from now."</div>
+
+        <div class="highlight"><strong>Q14: "Is there anything about your background that you're concerned might not be a fit?"</strong><br>"Honest answer: I haven't worked at the scale Teradata operates — petabyte-scale data warehouses, global enterprise customers, multi-cloud infrastructure. That's a gap I know exists and I'm not going to pretend otherwise. What I'd say is: my gap is domain depth, not product fundamentals. I know how to write a PRD, conduct research, analyze data, work with engineering, and think from the user's perspective — I've done all of that. What I'll need to learn is the Teradata platform deeply, the enterprise customer dynamics, and the technical vocabulary of the data warehouse world. I'm a fast learner, I'm already ahead on that curve given my AI proficiency prep, and I'm genuinely excited about the domain. I'll earn the domain knowledge — but the PM fundamentals are already there."</div>
+      </div>
+    </div>
+    <div class="q-divider"></div>
+    <div class="q-footer"><span class="q-tag">strategic</span><span class="q-tag">judgment</span><span class="q-tag">final-round</span></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ STAR BANK ═══════════════ -->
+<div id="panel-star" class="panel">
+
+  <div class="section-label">
+    <div class="icon icon-gold">⭐</div>
+    <div class="sl-text">
+      <div class="sl-overline">Ready-to-Use Stories</div>
+      <div class="sl-title">Your 4 STAR Story Bank</div>
+    </div>
+  </div>
+
+  <div class="alert alert-green">
+    <div class="alert-icon">📌</div>
+    <div>These 4 stories cover ~80% of behavioral questions you'll face. Memorize the <strong>Situation, Task, and Result</strong> cold. Adapt the Action based on what the question emphasizes. Each story should take 90–120 seconds when spoken.</div>
+  </div>
+
+  <div class="star-table">
+    <table>
+      <tr><th>S</th><th>T</th><th>A</th><th>R</th><th>Use When Asked About</th></tr>
+      <tr>
+        <td><span class="label">STAR 1</span><br>Enigma Metaverse: Churn dropping 21.8%</td>
+        <td>Month-2 retention collapsing, no clear cause identified</td>
+        <td>Cohort analysis in Mixpanel → found 4× churn risk for users missing 3 core actions in week 1 → drafted onboarding PRD → shipped in 2 sprints with full tracking</td>
+        <td><span class="metric">21.8% churn reduction</span> in new cohorts vs. old onboarding</td>
+        <td>Data-driven decisions · Ownership · Impact · Analytics</td>
+      </tr>
+      <tr>
+        <td><span class="label">STAR 2</span><br>Aasaan App: 46% sales efficiency lift</td>
+        <td>Sales team losing deals at demo stage — unclear why despite good product</td>
+        <td>Shadowed 5 sales calls → identified top 3 objections → built objection-handling guide + product demo script + comparison one-pager for reps</td>
+        <td><span class="metric">46% sales efficiency improvement</span> measured by deal-close rate per rep per month</td>
+        <td>Cross-functional · Customer empathy · Business impact · Communication</td>
+      </tr>
+      <tr>
+        <td><span class="label">STAR 3</span><br>MyCaptain: 400% revenue in 4 months</td>
+        <td>New team needed to hit aggressive revenue targets with limited resources</td>
+        <td>Built structured outreach playbook → trained team on qualification criteria → set weekly metrics review → identified top-converting course categories and double-downed</td>
+        <td><span class="metric">400% revenue growth</span> in 4 months through systematic execution</td>
+        <td>Execution · Metrics · Scrappiness · Hustle · Growth</td>
+      </tr>
+      <tr>
+        <td><span class="label">STAR 4</span><br>Aasaan/Enigma: Engineering disagreement</td>
+        <td>Engineering lead pushed back on a product improvement I'd proposed, claiming sprint capacity</td>
+        <td>Set up 30-min working session → brought data showing user impact → collaborated on a scoped MVP version → shipped together</td>
+        <td>Feature shipped, positive feedback, and built lasting trust with engineering lead who became a proactive collaborator</td>
+        <td>Cross-functional conflict · Influence without authority · Collaboration</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section-label" style="margin-top:32px">
+    <div class="icon icon-red">🎭</div>
+    <div class="sl-text">
+      <div class="sl-overline">Story Delivery Tips</div>
+      <div class="sl-title">How to Tell a Story That Lands</div>
+    </div>
+  </div>
+
+  <div class="power-move">
+    <div class="pm-label">⏱️ Timing</div>
+    <strong>90–120 seconds per story. Not 4 minutes.</strong> If you're going longer, you're overexplaining the situation and under-delivering the result. Practice with a timer.
+  </div>
+  <div class="power-move">
+    <div class="pm-label">📊 Lead with the result once</div>
+    In round 3 especially: open with the result, then tell the story. "I led an initiative that reduced churn by 21.8% — here's how." Anchors the story in impact immediately.
+  </div>
+  <div class="power-move">
+    <div class="pm-label">🎯 Say "I" not "we"</div>
+    Interviewers need to know what <em>you</em> specifically did. "We reduced churn" → "I analyzed the cohort data and identified that users who missed 3 core actions in week 1 had 4× higher churn — I then drafted the PRD and worked with design to ship the revised onboarding."
+  </div>
+  <div class="power-move">
+    <div class="pm-label">🔢 Quantify everything you can</div>
+    Numbers create credibility. 21.8% > "significantly." 4× > "much higher." Even rough estimates with stated assumptions beat vague language.
+  </div>
+
+</div>
+
+<!-- ═══════════════ CLOSE STRONG ═══════════════ -->
+<div id="panel-close" class="panel">
+
+  <div class="section-label">
+    <div class="icon icon-green">🏁</div>
+    <div class="sl-text">
+      <div class="sl-overline">End Every Round Right</div>
+      <div class="sl-title">Close Strong</div>
+    </div>
+  </div>
+
+  <div class="alert alert-blue">
+    <div class="alert-icon">💡</div>
+    <div>The last 5 minutes of every round are where you convert a good interview into an offer. <strong>Always have 3–5 questions ready per round.</strong> Asking great questions signals you've done your research, you're serious, and you think like a PM.</div>
+  </div>
+
+  <div class="section-label" style="margin-top:8px">
+    <div class="icon icon-red">❓</div>
+    <div class="sl-text">
+      <div class="sl-overline">For HR Round</div>
+      <div class="sl-title">Questions to Ask the Recruiter</div>
+    </div>
+  </div>
+
+  <div class="closing-q">What does the onboarding experience look like for a new APM — who would I be learning from directly in the first 90 days?</div>
+  <div class="closing-q">How does the Analytics PM team collaborate with the UX research team — is that a tight loop or more separate tracks?</div>
+  <div class="closing-q">What does success look like for this role at the 6-month mark from the hiring manager's perspective?</div>
+  <div class="closing-q">Is the team primarily working in a co-located office environment, or is there flexibility in the work setup in Hyderabad?</div>
+
+  <div class="section-label" style="margin-top:28px">
+    <div class="icon icon-blue">❓</div>
+    <div class="sl-text">
+      <div class="sl-overline">For PM Panel Round</div>
+      <div class="sl-title">Questions to Ask the Senior PM</div>
+    </div>
+  </div>
+
+  <div class="closing-q">What's the biggest product challenge the analytics PM team is wrestling with right now that an APM could actually help move?</div>
+  <div class="closing-q">How does the team currently handle competitive intelligence — is there a structured process or is it more ad hoc?</div>
+  <div class="closing-q">What's the relationship between the PM team and the data science team when it comes to AI features — how closely do you collaborate on things like ClearScape Analytics?</div>
+  <div class="closing-q">What's one thing you wish your last APM had done differently in their first quarter?</div>
+
+  <div class="section-label" style="margin-top:28px">
+    <div class="icon icon-green">❓</div>
+    <div class="sl-text">
+      <div class="sl-overline">For Final Round (Director/VP)</div>
+      <div class="sl-title">Questions to Ask Senior Leadership</div>
+    </div>
+  </div>
+
+  <div class="closing-q">Teradata is making a significant strategic bet on agentic AI — how do you see the APM team's role in shaping that user experience, not just supporting it?</div>
+  <div class="closing-q">What does the growth path from APM to PM look like at Teradata — is it time-based, milestone-based, or opportunity-based?</div>
+  <div class="closing-q">Where is the Analytics PM team today vs. where you want it to be in 2 years — and what's standing between here and there?</div>
+  <div class="closing-q">What's one quality you've seen in the best APMs you've worked with that doesn't show up on a resume?</div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">
+    <div class="icon icon-gold">🔥</div>
+    <div class="sl-text">
+      <div class="sl-overline">The Power Close</div>
+      <div class="sl-title">End Every Round With This</div>
+    </div>
+  </div>
+
+  <div class="power-move">
+    <div class="pm-label">💬 Say This (Adapt to Each Round)</div>
+    <strong>"Before we wrap up — I want to say directly that I'm genuinely excited about this role. Not generically excited — specifically excited. The intersection of enterprise analytics, agentic AI, and the APM function supporting that build is exactly where I want to spend the next chapter of my career. I've already passed the AI Proficiency Test, I've been studying the platform, and I have a clear picture of how I'd contribute in the first 90 days. I'd love to continue this conversation."</strong>
+  </div>
+
+  <div class="power-move">
+    <div class="pm-label">📧 After Every Round — Send This</div>
+    Send a thank-you email within 2 hours. Include: (1) One specific thing from the conversation that you found genuinely interesting, (2) A follow-up thought or resource related to it, (3) Reiterate your interest clearly. <strong>Most candidates don't send these. You will.</strong>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">
+    <div class="icon icon-red">⚡</div>
+    <div class="sl-text">
+      <div class="sl-overline">The Night Before</div>
+      <div class="sl-title">Final Checklist</div>
+    </div>
+  </div>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h3>✅ Know Cold</h3>
+      <div class="item"><div class="dot"></div><div>Your 3 metric numbers: 21.8%, 46%, 400%</div></div>
+      <div class="item"><div class="dot"></div><div>What Teradata Vantage does + ClearScape Analytics</div></div>
+      <div class="item"><div class="dot"></div><div>Your 4 STAR stories — practice aloud</div></div>
+      <div class="item"><div class="dot"></div><div>Your "Tell me about yourself" — under 90 seconds</div></div>
+      <div class="item"><div class="dot"></div><div>5 closing questions per round</div></div>
+    </div>
+    <div class="cheat-card">
+      <h3>🚫 Never Say</h3>
+      <div class="item"><div class="dot"></div><div>"We did..." → Say "I did / I led / I owned..."</div></div>
+      <div class="item"><div class="dot"></div><div>"I don't know much about Teradata yet" → You do. You researched.</div></div>
+      <div class="item"><div class="dot"></div><div>"I'm just looking for any PM opportunity" → Be specific about Teradata.</div></div>
+      <div class="item"><div class="dot"></div><div>"No questions for me, thanks" → Always have questions.</div></div>
+      <div class="item"><div class="dot"></div><div>Anything longer than 2.5 minutes for one answer.</div></div>
+    </div>
+  </div>
+
+</div>
+</div><!-- end main -->
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleAnswer(btn) {
+  const answer = btn.nextElementSibling;
+  const arrow = btn.querySelector('.toggle-arrow');
+  const isOpen = answer.classList.contains('show');
+  answer.classList.toggle('show', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+  btn.childNodes[1].textContent = isOpen ? ' Show Model Answer' : ' Hide Answer';
+}
+</script>
+</body>
+</html>
