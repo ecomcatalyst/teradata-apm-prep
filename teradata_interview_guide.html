@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teradata APM Interview Guide — Yashwanth</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1f2d47;
+    --accent: #f97316;
+    --accent2: #3b82f6;
+    --accent3: #10b981;
+    --accent4: #a855f7;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --tag-bg: rgba(249,115,22,0.12);
+    --tag-border: rgba(249,115,22,0.3);
+    --highlight: rgba(249,115,22,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* Grid noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(249,115,22,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(249,115,22,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 0 0 32px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(249,115,22,0.1), transparent);
+  }
+
+  .sidebar-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .sidebar-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  .sidebar-nav {
+    padding: 16px 0;
+    flex: 1;
+  }
+
+  .nav-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 24px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    background: var(--highlight);
+    border-left-color: var(--accent);
+    color: var(--text);
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .nav-item.active .nav-dot, .nav-item:hover .nav-dot { opacity: 1; }
+
+  .nav-count {
+    margin-left: auto;
+    font-size: 10px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    margin: 16px 24px;
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin: 4px 24px 0;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 0 80px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0f1a2e 0%, #0a0e1a 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 64px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: 'TERADATA';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 120px;
+    color: rgba(249,115,22,0.04);
+    letter-spacing: 10px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 42px;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .stat-chip strong {
+    display: block;
+    font-size: 18px;
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+
+  .stat-chip span { color: var(--text-dim); font-size: 10px; }
+
+  /* INTERVIEWER BRIEF */
+  .interviewer-card {
+    margin: 40px 64px 0;
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02));
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .interviewer-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .interviewer-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .interviewer-info .role {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  .interviewer-info p {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .interviewer-tips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .tip-pill {
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+  }
+
+  /* SECTION */
+  .section {
+    padding: 56px 64px 0;
+    scroll-margin-top: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .section-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .icon-behavioral { background: rgba(249,115,22,0.15); }
+  .icon-resume { background: rgba(16,185,129,0.15); }
+  .icon-technical { background: rgba(59,130,246,0.15); }
+  .icon-product { background: rgba(168,85,247,0.15); }
+  .icon-company { background: rgba(234,179,8,0.15); }
+  .icon-closing { background: rgba(236,72,153,0.15); }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--text);
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+    padding-left: 56px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .q-card:hover { border-color: rgba(249,115,22,0.3); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .q-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .q-chevron {
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: transform 0.3s;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .q-card.open .q-chevron { transform: rotate(180deg); }
+
+  .q-body {
+    display: none;
+    padding: 0 24px 24px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .q-card.open .q-body { display: block; }
+
+  .answer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 14px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .answer-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .answer-text {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+
+  .answer-text strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .answer-text .highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .answer-text p { margin-bottom: 12px; }
+  .answer-text p:last-child { margin-bottom: 0; }
+
+  /* STRUCTURE BLOCK */
+  .structure-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .structure-block .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* METRIC CALLOUT */
+  .metric-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+  }
+
+  .metric-chip {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .metric-chip strong {
+    display: block;
+    color: var(--accent3);
+    font-size: 15px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+
+  .metric-chip span { color: var(--text-muted); font-size: 10px; }
+
+  /* WARNING / TIP BLOCK */
+  .tip-block {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .tip-block.tip { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); color: var(--accent2); }
+  .tip-block.warn { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2); color: var(--accent); }
+  .tip-block.success { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: var(--accent3); }
+
+  .tip-block .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .tip-block .content { color: var(--text-dim); }
+  .tip-block .content strong { color: var(--text); }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 56px 64px 0;
+    opacity: 0.5;
+  }
+
+  /* CHECKLIST */
+  .checklist {
+    list-style: none;
+    margin: 12px 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+
+  .checklist li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* SCROLL TO TOP */
+  .scroll-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: white;
+  }
+
+  .scroll-top.visible { opacity: 1; }
+
+  /* Completed state */
+  .q-card.done .q-header { opacity: 0.5; }
+  .q-card.done { border-color: rgba(16,185,129,0.3); }
+  .done-mark { font-size: 14px; color: var(--accent3); margin-left: 4px; }
+
+  /* FOOTER SECTION */
+  .footer-section {
+    padding: 56px 64px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    margin-top: 64px;
+  }
+
+  .footer-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .q-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .q-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid;
+  }
+
+  .q-tag.resume { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25); color: var(--accent3); }
+  .q-tag.technical { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.25); color: var(--accent2); }
+  .q-tag.behavioral { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.3); color: var(--accent); }
+  .q-tag.product { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.25); color: var(--accent4); }
+  .q-tag.company { background: rgba(234,179,8,0.1); border-color: rgba(234,179,8,0.25); color: #eab308; }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .hero, .section, .section-divider, .footer-section { padding-left: 24px; padding-right: 24px; }
+    .interviewer-card { margin-left: 24px; margin-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">Interview Guide</div>
+      <div class="sidebar-title">Teradata — APM Analytics</div>
+      <div class="sidebar-meta">Jefferson Uy · ClearScape Analytics PM</div>
+    </div>
+
+    <div style="padding: 16px 24px 0;">
+      <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+      <div class="progress-label" id="progress-label">0 of 45 questions reviewed</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Sections</div>
+      <a class="nav-item active" href="#intro" onclick="setActive(this)">
+        <div class="nav-dot"></div> Interviewer Brief
+      </a>
+      <a class="nav-item" href="#behavioral" onclick="setActive(this)">
+        <div class="nav-dot"></div> Behavioral / Tell Me About <span class="nav-count">8</span>
+      </a>
+      <a class="nav-item" href="#resume" onclick="setActive(this)">
+        <div class="nav-dot"></div> Resume Deep-Dives <span class="nav-count">10</span>
+      </a>
+      <a class="nav-item" href="#product" onclick="setActive(this)">
+        <div class="nav-dot"></div> Product Thinking <span class="nav-count">8</span>
+      </a>
+      <a class="nav-item" href="#technical" onclick="setActive(this)">
+        <div class="nav-dot"></div> Technical / Analytics <span class="nav-count">10</span>
+      </a>
+      <a class="nav-item" href="#company" onclick="setActive(this)">
+        <div class="nav-dot"></div> Company & Role Fit <span class="nav-count">5</span>
+      </a>
+      <a class="nav-item" href="#closing" onclick="setActive(this)">
+        <div class="nav-dot"></div> Your Questions to Ask <span class="nav-count">4</span>
+      </a>
+
+      <div class="nav-section-label" style="margin-top: 8px;">Quick Ref</div>
+      <a class="nav-item" href="#cheatsheet" onclick="setActive(this)">
+        <div class="nav-dot"></div> Metrics Cheat Sheet
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-badge">Live Interview Prep</div>
+      <h1>Crack the <span>Teradata</span><br>APM Interview</h1>
+      <p class="hero-sub">Your personalised, question-by-question guide covering every angle Jefferson Uy is likely to explore — behavioral, resume, product thinking, analytics, and company fit.</p>
+
+      <div class="stats-row">
+        <div class="stat-chip">
+          <strong>↑38%</strong>
+          <span>Dev Efficiency</span>
+        </div>
+        <div class="stat-chip">
+          <strong>↓21.8%</strong>
+          <span>Churn Reduction</span>
+        </div>
+        <div class="stat-chip">
+          <strong>↑46%</strong>
+          <span>Sales Efficiency</span>
+        </div>
+        <div class="stat-chip">
+          <strong>↑400%</strong>
+          <span>Revenue in 4 months</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERVIEWER CARD -->
+    <div class="interviewer-card">
+      <div class="interviewer-avatar">JU</div>
+      <div class="interviewer-info">
+        <h3>Jefferson Uy</h3>
+        <div class="role">ClearScape Analytics™ Product Manager · Teradata</div>
+        <p>Jefferson focuses on <strong>open source analytics solutions</strong> that help businesses leverage data for strategic insights. He has a passion for <strong>world history</strong> and enjoys watching documentaries. Use this: if there's a natural moment, a brief mention of your own interest in history creates genuine rapport.</p>
+        <div class="interviewer-tips">
+          <div class="tip-pill">🔍 Asks "so what?" questions</div>
+          <div class="tip-pill">📊 Loves data-backed reasoning</div>
+          <div class="tip-pill">🌍 History buff — build rapport</div>
+          <div class="tip-pill">🔓 Open-source analytics focus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════ BEHAVIORAL ═══════════════════════════════════════ -->
+    <div class="section" id="behavioral">
+      <div class="section-header">
+        <div class="section-icon icon-behavioral">🧠</div>
+        <h2 class="section-title">Behavioral / Tell Me About Yourself</h2>
+      </div>
+      <p class="section-desc">STAR format expected. Every answer must land a concrete metric. Jefferson will probe the "so what?" behind each story.</p>
+
+      <!-- Q1 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·01</span>
+          <div>
+            <div class="q-text">Walk me through your background and why you're interested in this role at Teradata.</div>
+            <div class="q-tags"><span class="q-tag behavioral">Opener</span><span class="q-tag company">Company Fit</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"I'm an Associate Product Manager with about two and a half years of experience across B2B SaaS, e-commerce, and EdTech. What ties all my roles together is a consistent pattern: I find where data isn't being used to its full potential, and I close that loop between insight and execution."</p>
+            <div class="structure-block">
+              <span class="label">3-Part Arc to Follow</span>
+              1. <strong>Enigma (current):</strong> PM on ERPNext SaaS — shipped community product, built churn prediction model with Pega CDH, cut sprint rework 38%.<br>
+              2. <strong>Aasaan App:</strong> Built ML lead-scoring in Python, drove 21.8% churn reduction by feeding sales signals back into engineering roadmap.<br>
+              3. <strong>Why Teradata:</strong> "Teradata is where enterprise analytics actually gets operationalized at scale. ClearScape Analytics addresses exactly what I've been solving in smaller contexts — how do you make AI/ML models work reliably in production, not just in a notebook? That's a problem I want to work on at a much larger scale."
+            </div>
+            <div class="tip-block tip">
+              <div class="icon">💡</div>
+              <div class="content"><strong>Interviewer Hook:</strong> End with a question — "I was particularly drawn to the open-source direction of ClearScape. Is that integration still a growing focus for the team?" This makes it a conversation, not a monologue.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·02</span>
+          <div>
+            <div class="q-text">Tell me about a time you had to use data to influence a decision you didn't make yourself.</div>
+            <div class="q-tags"><span class="q-tag behavioral">Influence</span><span class="q-tag resume">Resume-Linked</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer (STAR)</div>
+          <div class="answer-text">
+            <p><strong>Situation:</strong> At Aasaan App, the growth team's acquisition budget was being split evenly across all campaigns, but I suspected one segment was dramatically underperforming.</p>
+            <p><strong>Task:</strong> I needed to convince leadership to reallocate budget without having direct authority over the decision.</p>
+            <p><strong>Action:</strong> I decomposed the funnel — Acquisition → Activation → Revenue — and built a conversion analysis by lead source in Python. I showed that one channel had 3x higher CAC but 0.4x the LTV of the top-performing source. I packaged this as a one-pager with a clear recommendation, not a data dump.</p>
+            <p><strong>Result:</strong> The team realigned campaign spend. Within the quarter, we saw a <span class="highlight">16% CVR improvement and 24% CTR lift</span>. The bigger win was the process — this funnel data started flowing directly into the roadmap as a permanent feedback loop.</p>
+            <div class="tip-block success">
+              <div class="icon">✓</div>
+              <div class="content"><strong>What Jefferson is checking:</strong> That you can translate analysis into persuasion without authority — core APM skill.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·03</span>
+          <div>
+            <div class="q-text">Describe a situation where you had to manage conflicting priorities across multiple stakeholders.</div>
+            <div class="q-tags"><span class="q-tag behavioral">Stakeholder Mgmt</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer (STAR)</div>
+          <div class="answer-text">
+            <p><strong>Situation:</strong> While shipping Enigma Community v1, I was managing four stakeholders simultaneously — Design wanted more UX polish, Legal had compliance requirements, Ops needed specific admin features, and Engineering was pushing back on scope.</p>
+            <p><strong>Task:</strong> I had to maintain momentum across 3 cross-functional sprints without letting any single stakeholder's requests balloon the scope.</p>
+            <p><strong>Action:</strong> I ran structured stakeholder interviews upfront — not ad-hoc chats, but formalized sessions with a standard interview guide — and synthesised findings into a single prioritised feature backlog, visible to everyone. For each request I couldn't accommodate in v1, I created a documented v2 parking lot so no one felt unheard. I used the MoSCoW method to make the tradeoffs transparent and defensible.</p>
+            <p><strong>Result:</strong> We shipped in 3 sprints with zero scope changes mid-sprint. Legal sign-off came in sprint 2 without delays. Engineering's rework rate dropped to near zero because requirements were crystal clear from day one.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·04</span>
+          <div>
+            <div class="q-text">Tell me about a failure or a project that didn't go as planned. What did you learn?</div>
+            <div class="q-tags"><span class="q-tag behavioral">Self-Awareness</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Early in my role at Aasaan App, I built the ML lead-scoring model and presented it to the sales team expecting immediate adoption. The model was technically solid — 46% efficiency lift in testing — but I hadn't involved the sales team during development. They didn't trust it because they didn't understand it."</p>
+            <p><strong>What I learned:</strong> Data products are products. They need user research just like any other feature. I went back, held working sessions with the sales reps, showed them how the scores were derived, and let them pressure-test it against their intuition. Once they felt ownership of the logic, adoption jumped.</p>
+            <p><strong>Lasting lesson:</strong> A 90% accurate model that nobody uses is less valuable than a 75% accurate model that's embedded in daily workflow. Adoption is a product metric, not just an engineering one.</p>
+            <div class="tip-block warn">
+              <div class="icon">⚠</div>
+              <div class="content"><strong>Don't pick a trivial failure.</strong> Jefferson will probe deeper. A real failure that shows growth is far better than a polished non-answer.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·05</span>
+          <div>
+            <div class="q-text">How do you stay current with trends in AI, analytics, and data platforms?</div>
+            <div class="q-tags"><span class="q-tag behavioral">Growth Mindset</span><span class="q-tag company">Company Fit</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"AI trends are genuinely one of my main interests — it's not a talking point, it's something I follow closely. Practically, I run a local AI stack on my personal server: Ollama for local LLMs, n8n for automation workflows. This means I'm not just reading about model deployment challenges — I'm experiencing them."</p>
+            <p>I follow the Teradata developer blog, keep up with MLOps research (particularly around ModelOps and model drift), and regularly experiment with tools like Pega CDH, which I used professionally to build a churn prediction model."</p>
+            <div class="tip-block tip">
+              <div class="icon">💡</div>
+              <div class="content"><strong>Bonus:</strong> Mention you've been exploring ClearScape Analytics documentation and found the BYOM (Bring Your Own Model) capability particularly interesting for enterprise contexts where teams already have existing model investments.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·06</span>
+          <div>
+            <div class="q-text">Tell me about a time you worked with engineers and had to translate user needs into technical requirements.</div>
+            <div class="q-tags"><span class="q-tag behavioral">Cross-Functional</span><span class="q-tag resume">Resume-Linked</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer (STAR)</div>
+          <div class="answer-text">
+            <p><strong>Situation:</strong> At Enigma, we were migrating to ERPNext SaaS. Engineers were getting stories like "users want better navigation" — vague enough to block sprint planning.</p>
+            <p><strong>Task:</strong> I needed to create a requirements process that engineers could actually build from.</p>
+            <p><strong>Action:</strong> I introduced a requirement-clarification gate — no story went to sprint without acceptance criteria, a definition of done, and documented edge cases. I ran user interviews, translated findings into specific user stories with "Given / When / Then" format, and added wireframes from Figma for every non-trivial feature. I also instituted a "requirements walkthrough" at sprint kickoff so engineers could challenge ambiguity before they wrote a line of code.</p>
+            <p><strong>Result:</strong> Sprint rework dropped 38%, planning overhead fell significantly, and mid-sprint scope changes went to zero for the Community v1 build. Engineers actually told me it was the clearest requirement set they'd worked with.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·07</span>
+          <div>
+            <div class="q-text">Where do you see yourself in 3 years? Why product management versus data science or analytics?</div>
+            <div class="q-tags"><span class="q-tag behavioral">Career Goals</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"In three years I want to own a product area end-to-end — not just supporting PMs but driving strategy from discovery through delivery. Teradata is the right place for that because the problems are genuinely complex: you're not building simple CRUD apps, you're figuring out how to make enterprise-scale AI actually work in production."</p>
+            <p>On the PM vs. data science question: "I love data, but what I find most energizing is the user problem upstream of the model. Data science tells you what's happening; product management shapes what you build because of what's happening. The combination of analytical depth and user empathy is where I do my best work — and where I've driven the most measurable outcomes."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">B·08</span>
+          <div>
+            <div class="q-text">Tell me about a time you had to learn something technical quickly to do your job effectively.</div>
+            <div class="q-tags"><span class="q-tag behavioral">Learning Agility</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"When I joined Aasaan App, I needed to understand the product's technical stack well enough to write meaningful acceptance criteria. The platform was built on a headless e-commerce architecture — something I hadn't worked with before."</p>
+            <p>I spent my first two weeks going through the API documentation, shadowing engineering standups, and building a small internal Notion wiki that mapped the product's technical components to user-facing features. Within a month, I was writing stories that engineers didn't need to rewrite."</p>
+            <p>More recently: building an ML lead-scoring model in Python required learning scikit-learn and feature engineering basics beyond what I'd done academically. I treated it as a product itself — defined the use case, iterated on the model, measured it against a baseline."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════ RESUME ═══════════════════════════════════════ -->
+    <div class="section" id="resume">
+      <div class="section-header">
+        <div class="section-icon icon-resume">📄</div>
+        <h2 class="section-title">Resume Deep-Dives</h2>
+      </div>
+      <p class="section-desc">Jefferson will have your resume in front of him. Expect precise follow-ups on every metric you've claimed.</p>
+
+      <!-- R1 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·01</span>
+          <div>
+            <div class="q-text">You mention a 38% reduction in sprint rework. How exactly did you measure that, and how do you know it was caused by your process change?</div>
+            <div class="q-tags"><span class="q-tag resume">Enigma</span><span class="q-tag technical">Metrics</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Ready to Defend This</div>
+          <div class="answer-text">
+            <p>"Rework was tracked in Jira — we measured story points returned to 'In Progress' or 'Blocked' after moving to 'In Review', and we also counted mid-sprint scope additions. Before the requirements-clarification gate, we averaged roughly X reopened tickets per sprint across 6+ engineering cycles."</p>
+            <p>On attribution: "I can't claim 100% causal isolation — there were other variables. But the gate was introduced in sprint N, and the rework rate fell consistently starting sprint N+1. We also had qualitative confirmation from the engineering lead who explicitly noted fewer clarification interruptions."</p>
+            <div class="tip-block warn">
+              <div class="icon">⚠</div>
+              <div class="content"><strong>Critical:</strong> Don't overclaim clean A/B causality. Jefferson knows product environments are messy. Showing you understand correlation vs causation actually builds credibility. Say "I can attribute it confidently but not exclusively."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- R2 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·02</span>
+          <div>
+            <div class="q-text">Tell me more about the Pega Customer Decision Hub churn model. How did it work technically, and what was the business impact?</div>
+            <div class="q-tags"><span class="q-tag resume">Enigma</span><span class="q-tag technical">ML/AI</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Pega CDH is a next-best-action AI platform built for real-time decisioning. We used it to build a predictive churn model that scored at-risk accounts before any visible revenue impact."</p>
+            <div class="structure-block">
+              <span class="label">Technical Flow</span>
+              Input signals: login frequency drop, support ticket spikes, feature usage decline, payment delays.<br><br>
+              Model: Pega's adaptive models use Bayesian learning — they update in real-time as new behaviour comes in, unlike a static model you'd retrain monthly.<br><br>
+              Output: Each account got a propensity-to-churn score. Accounts above a threshold triggered automated outreach workflows (email, CSM alert) without manual intervention.
+            </div>
+            <p><strong>Business impact:</strong> The shift from reactive (churn already happening) to proactive (at-risk identified 3–6 weeks early) is the core value. Retention actions are significantly cheaper than re-acquisition. While I can't cite exact revenue numbers publicly, the model identified cohorts that became our targeted retention campaigns.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- R3 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·03</span>
+          <div>
+            <div class="q-text">Walk me through how you built the ML lead-scoring model at Aasaan App. What features did you use, what algorithm, and how did you validate it?</div>
+            <div class="q-tags"><span class="q-tag resume">Aasaan App</span><span class="q-tag technical">ML</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Technical Detail Required</div>
+          <div class="answer-text">
+            <p>"The business problem was that our sales team was working every lead with equal effort, but conversion rate varied massively by source and firmographic profile."</p>
+            <div class="structure-block">
+              <span class="label">Model Build</span>
+              <strong>Features used:</strong> Lead source, company size, industry vertical, time-to-first-response, demo request vs. free trial, website pages visited, number of touchpoints before inbound.<br><br>
+              <strong>Target variable:</strong> Binary — converted to paid customer within 90 days.<br><br>
+              <strong>Algorithm:</strong> I tried logistic regression first (interpretable, fast to explain to sales), then XGBoost. XGBoost won on AUC-ROC. I chose it for the final model.<br><br>
+              <strong>Validation:</strong> 80/20 train-test split. Evaluated on AUC-ROC and precision-recall curve — precision mattered more than recall for us because we wanted to protect sales time from false positives.<br><br>
+              <strong>Deployment:</strong> Scores fed back into HubSpot CRM via a Python script, so reps saw a score on every lead card without changing their workflow.
+            </div>
+            <p><strong>Outcome:</strong> 46% lift in sales efficiency — measured as revenue closed per rep per month, not just call volume.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- R4 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·04</span>
+          <div>
+            <div class="q-text">The 21.8% churn reduction at Aasaan — how much of that was your direct contribution vs. the broader team?</div>
+            <div class="q-tags"><span class="q-tag resume">Aasaan App</span><span class="q-tag behavioral">Honesty</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Calibrate Honestly</div>
+          <div class="answer-text">
+            <p>"Honestly, the 21.8% was a company-level metric — I can't claim solo credit for it. My contribution was the mechanism: I systematically captured churn signals from my frontline sales conversations — the objections that came up after 3–6 months, the features that weren't working as expected — and packaged them into actionable inputs for the Product and Engineering team."</p>
+            <p>"Before I formalized this process, retention feedback was ad-hoc, if it existed at all. My work created the feedback loop. But the actual retention actions — product fixes, CSM outreach — involved the whole team. The 21.8% was the output of that system."</p>
+            <div class="tip-block success">
+              <div class="icon">✓</div>
+              <div class="content">Saying this shows self-awareness and intellectual honesty — something Jefferson will respect far more than an overclaim.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- R5 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·05</span>
+          <div>
+            <div class="q-text">You went from MyCaptain (EdTech ops) → Aasaan App (sales/growth) → Enigma (APM). How do these connect? Is the progression intentional?</div>
+            <div class="q-tags"><span class="q-tag resume">Career Story</span><span class="q-tag behavioral">Narrative</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Own the Non-Linear Path</div>
+          <div class="answer-text">
+            <p>"Intentional in retrospect, and increasingly intentional in real-time. At MyCaptain, I was hands-on in go-to-market execution — I learned what makes a sales motion work by doing it from scratch. 400% revenue growth in 4 months taught me more about product-market fit than most case studies."</p>
+            <p>"At Aasaan, I deliberately picked a role where I could get closer to the product — feeding sales signal back into roadmap decisions was the bridge. The ML model was me trying to bring systematic thinking to what had been intuition-driven work."</p>
+            <p>"Enigma was the explicit move into formal PM. Each step gave me a layer most APMs don't have: I know how customers actually buy, how they churn, and how salespeople interpret product gaps. That's context you can't get starting directly in a PM role."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- R6 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·06</span>
+          <div>
+            <div class="q-text">Your degree is in Electronics & Communications Engineering. How has that shaped how you approach product work?</div>
+            <div class="q-tags"><span class="q-tag resume">Education</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"ECE gave me two things that directly apply: systems thinking and comfort with signal processing — which maps surprisingly well to analytics. In signal processing, you're constantly asking 'is this meaningful signal or noise?' — that's exactly the question in product analytics when you're interpreting a dip in DAU."</p>
+            <p>"The Pega Data Scientist certification was a deliberate way to bridge academic ML with practical, production-grade decisioning. At SRM, my coursework in Applied Machine Learning and Probability & Statistics gave me the foundation; the certification and then the actual model build at Aasaan made it real."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- R7 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·07</span>
+          <div>
+            <div class="q-text">What tools do you use today for analytics and product work, and how deep is your SQL knowledge?</div>
+            <div class="q-tags"><span class="q-tag resume">Tools</span><span class="q-tag technical">SQL</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Precise, Not Vague</div>
+          <div class="answer-text">
+            <p>"Day-to-day analytics: Google Analytics / GA4 for web, HubSpot for CRM and funnel tracking, Looker Studio for dashboarding. For product tracking in SaaS contexts, I'm familiar with Mixpanel and Amplitude event schemas."</p>
+            <p>"SQL: I write queries regularly — JOINs, GROUP BY, window functions for cohort analysis (e.g., tracking which signup month shows highest retention at 30/60/90 days). I'm not a DB engineer, but I can write the queries I need to answer product questions without waiting for a data analyst."</p>
+            <p>"Python: pandas for data manipulation, scikit-learn for the ML work, matplotlib/seaborn for quick visualizations before handing off to BI tools."</p>
+            <div class="tip-block tip">
+              <div class="icon">💡</div>
+              <div class="content"><strong>Teradata context:</strong> Mention you're aware of Teradata SQL being ANSI-standard but with specific extensions like TD_NORMALIZE_MEET, and that you're genuinely interested in learning VantageCloud's in-database analytics functions.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- R8 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·08</span>
+          <div>
+            <div class="q-text">You mention "formalised a product-market feedback loop" — what does that mean concretely? What did the process look like?</div>
+            <div class="q-tags"><span class="q-tag resume">Aasaan App</span><span class="q-tag product">Process</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Before I formalised it, retention insight lived in Slack messages and verbal handoffs — nothing systematic. Here's what I built:"</p>
+            <div class="structure-block">
+              <span class="label">The Feedback Loop (Concrete Steps)</span>
+              1. <strong>Weekly Capture:</strong> After every demo or churned account conversation, I logged 3 things in Notion: the objection, the feature gap, and the user persona.<br><br>
+              2. <strong>Monthly Synthesis:</strong> I clustered the objections by theme and mapped them against our product roadmap — was the gap already being addressed? On the backlog? Untracked?<br><br>
+              3. <strong>Roadmap Input:</strong> Gaps that appeared 3+ times in a month got escalated as documented feature requests to the PM and eng team, with supporting data from the lead-scoring model showing which segments they affected most.<br><br>
+              4. <strong>Closed Loop:</strong> When a feature shipped, I'd notify the accounts that raised the gap — this also supported re-engagement for churned users.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- R9 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·09</span>
+          <div>
+            <div class="q-text">What has been your biggest PM challenge at Enigma so far, and what would you do differently?</div>
+            <div class="q-tags"><span class="q-tag resume">Enigma</span><span class="q-tag behavioral">Self-Awareness</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"The hardest part of Enigma has been operating in a startup where priorities shift fast and data infrastructure is still maturing. At times I've had to make prioritisation decisions with less quantitative backing than I'd like — more qualitative signal from sales calls and user interviews."</p>
+            <p>"What I'd do differently: I'd establish a lightweight analytics setup — even just GA4 event tracking and a simple SQL database of product events — much earlier. I relied more on qualitative feedback than I should have in the first few months, when even a simple funnel dashboard would have made my prioritisation arguments much stronger."</p>
+            <p>"That gap is part of why Teradata is so interesting to me — working in an environment where the analytics infrastructure is world-class, so I can focus on what to measure and why, rather than how to measure at all."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- R10 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">R·10</span>
+          <div>
+            <div class="q-text">How have you used Figma in your PM role? What's your relationship with design?</div>
+            <div class="q-tags"><span class="q-tag resume">Tools</span><span class="q-tag product">Design</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Figma in my PM work isn't about me designing — it's about me communicating requirements visually so designers don't have to work from ambiguous text. I create wireframes and annotated flows for any feature that involves UI, which gives the design team a starting point rather than a blank canvas."</p>
+            <p>"The more important role: Figma is my collaboration layer. I use comments and component variants to communicate edge cases and states that are hard to describe in a user story. For Enigma Community v1, every story had a corresponding Figma frame. That's part of why mid-sprint scope changes dropped to zero."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════ PRODUCT ═══════════════════════════════════════ -->
+    <div class="section" id="product">
+      <div class="section-header">
+        <div class="section-icon icon-product">🧩</div>
+        <h2 class="section-title">Product Thinking Questions</h2>
+      </div>
+      <p class="section-desc">Jefferson is testing structure, user empathy, and analytical rigor. Use frameworks, then go beyond them.</p>
+
+      <!-- P1 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·01</span>
+          <div>
+            <div class="q-text">How would you prioritise features for a new analytics product? Walk me through your framework.</div>
+            <div class="q-tags"><span class="q-tag product">Prioritisation</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Prioritisation for me starts with three questions: What's the user's most painful unsolved problem? What moves the north star metric? What can we ship fast enough to validate before it becomes a bigger bet?"</p>
+            <div class="structure-block">
+              <span class="label">My Framework (Contextual, Not Dogmatic)</span>
+              <strong>Step 1 — Define the north star:</strong> For an analytics product, it's usually something like "insights activated per user" or "models in production per customer." Everything else is a proxy.<br><br>
+              <strong>Step 2 — Score opportunities:</strong> I use a modified RICE (Reach × Impact × Confidence ÷ Effort) with a data quality weight — in analytics products, features that improve data trust often unlock downstream value disproportionate to their apparent impact score.<br><br>
+              <strong>Step 3 — Sequence for learning:</strong> I front-load features that resolve the most uncertainty about user behavior, not just the highest-RICE items. Wrong assumptions compound.<br><br>
+              <strong>Step 4 — Gut-check with stakeholders:</strong> I circulate the prioritised backlog with rationale, invite challenge, and document disagreements. Transparency makes tradeoffs defensible.
+            </div>
+            <p>"At Teradata's scale, I'd also weigh customer segment value — enterprise customers often have very different prioritisation needs than SMB, and a single feature that unlocks a large enterprise segment may outweigh several SMB-facing improvements."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- P2 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·02</span>
+          <div>
+            <div class="q-text">How would you define success for a new feature in ClearScape Analytics?</div>
+            <div class="q-tags"><span class="q-tag product">Metrics</span><span class="q-tag company">Teradata-Specific</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"For an enterprise analytics platform like ClearScape, I'd define success across three layers:"</p>
+            <div class="structure-block">
+              <span class="label">Three-Layer Success Framework</span>
+              <strong>Layer 1 — Adoption:</strong> % of active VantageCloud users who use the feature within 30/60/90 days of release. Are the right personas adopting (data scientists vs. non-technical users)?<br><br>
+              <strong>Layer 2 — Activation:</strong> Are users completing the meaningful action, not just clicking in? For a ModelOps feature, that might be "first model successfully moved from training to production." One metric that says "this user got value."<br><br>
+              <strong>Layer 3 — Business outcome:</strong> For ClearScape, this connects to Teradata's own customer ROI story. Metrics like: reduction in time from model training to production, reduction in data movement costs, number of models scaled from pilot to enterprise. These are the metrics Teradata uses in customer conversations.
+            </div>
+            <p>"I'd also track guardrail metrics — things that shouldn't degrade: query performance, data governance compliance, system reliability."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- P3 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·03</span>
+          <div>
+            <div class="q-text">If a major enterprise customer says "your analytics platform is too complex for our non-technical users," how would you handle that?</div>
+            <div class="q-tags"><span class="q-tag product">Discovery</span><span class="q-tag behavioral">Stakeholder</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"First, I'd resist turning 'too complex' into a feature request immediately. That's a symptom, not a problem statement."</p>
+            <div class="structure-block">
+              <span class="label">Discovery Approach</span>
+              1. <strong>Understand "who" is non-technical:</strong> Business analyst? Exec? Operations staff? The solution is radically different for each persona.<br><br>
+              2. <strong>Observe the actual workflow:</strong> Shadow sessions. Where specifically does the flow break? Is it the data prep step, the model output interpretation, or the UI navigation?<br><br>
+              3. <strong>Quantify the gap:</strong> How many of this customer's users are in the "blocked" segment vs. power users? What's the business cost of that blocked segment not using the platform?<br><br>
+              4. <strong>Evaluate options:</strong> In ClearScape's context, this might map to existing solutions like KNIME's no-code interface or self-service UX enhancements that Teradata already ships. Is the customer aware of them?
+            </div>
+            <p>"The answer might be a product gap, or it might be a documentation/onboarding gap, or it might be a customer success problem. I'd diagnose before prescribing."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- P4 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·04</span>
+          <div>
+            <div class="q-text">How would you approach competitive research on data platforms? Who are Teradata's main competitors and how would you differentiate?</div>
+            <div class="q-tags"><span class="q-tag product">Strategy</span><span class="q-tag company">Teradata-Specific</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Show You've Done This Research</div>
+          <div class="answer-text">
+            <p><strong>Teradata's main competitive set in enterprise analytics:</strong></p>
+            <div class="structure-block">
+              <span class="label">Competitive Landscape</span>
+              <strong>Snowflake:</strong> Strong on cloud data warehouse, but ML/AI capabilities are more recent and less mature in-database. Teradata differentiator: in-database analytics that don't require data export.<br><br>
+              <strong>Databricks:</strong> Strong on open-source ML/Spark ecosystem. Databricks' strength is data science/ML; weaker on enterprise governance and workload management at Teradata scale.<br><br>
+              <strong>AWS SageMaker + Redshift / Google BigQuery + Vertex:</strong> Hyperscaler bundles. Differentiator: Teradata is cloud-agnostic, multicloud, hybrid — customers not locked into one cloud.<br><br>
+              <strong>Microsoft Fabric / Azure Synapse:</strong> Growing fast inside Microsoft-heavy enterprises. Teradata competes on performance at scale and existing enterprise relationships.
+            </div>
+            <p><strong>Teradata's core differentiator in my reading:</strong> ClearScape's in-database analytics — no data movement, no external model training pipeline — is genuinely differentiated. At the scale Teradata customers operate (billions of rows, millions of concurrent sessions), moving data to train a model is prohibitively expensive. Teradata's "train in place" approach solves a real enterprise cost problem.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- P5 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·05</span>
+          <div>
+            <div class="q-text">Walk me through how you would build a product demo for an analytics capability. What makes a great demo?</div>
+            <div class="q-tags"><span class="q-tag product">Enablement</span><span class="q-tag company">JD-Specific</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — JD mentions this explicitly</div>
+          <div class="answer-text">
+            <p>"A great analytics demo answers three questions for the audience: So what? How hard is it really? And what's my first step?"</p>
+            <div class="structure-block">
+              <span class="label">Demo Construction Framework</span>
+              <strong>1. Anchor to a real business problem first:</strong> Don't lead with the technology. Lead with "imagine you're a fraud analyst at a financial institution and you need to score 50 million transactions in real-time." Then show how ClearScape solves it.<br><br>
+              <strong>2. Show the full arc, not just the output:</strong> Data prep → model training → deployment → monitoring. Demos that only show the output miss the hardest part — showing it's operationally sustainable.<br><br>
+              <strong>3. Use real numbers, not toy datasets:</strong> Nothing undermines credibility like a 1,000-row demo dataset. Use the scale that matches the customer's reality.<br><br>
+              <strong>4. Highlight the differentiator mid-demo:</strong> At Teradata, that's the in-database execution. Show the time comparison, show no data movement. Make the competitor's approach look expensive by contrast.<br><br>
+              <strong>5. Leave a clear "try it yourself" path:</strong> ClearScape Analytics Experience on clearscape.teradata.com is perfect for this — direct customers there.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P6 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·06</span>
+          <div>
+            <div class="q-text">How do you think about the difference between what users say they want and what they actually need?</div>
+            <div class="q-tags"><span class="q-tag product">Discovery</span><span class="q-tag behavioral">User Empathy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Henry Ford's apocryphal quote — 'if I'd asked people what they wanted, they'd have said a faster horse' — gets misused constantly. The real lesson isn't to ignore users. It's to understand the job they're trying to do, not the solution they're proposing."</p>
+            <p>"In practice: at Enigma, users frequently asked for 'better reporting.' What they actually needed was a way to answer one specific question faster for their weekly leadership review. The solution was a single pre-built dashboard view, not a flexible reporting builder — which would have been 5x the build effort for the same outcome."</p>
+            <p>"My method: ask 'what are you trying to accomplish when you use this feature?' not 'what feature do you want?' Then look at their actual behavior in the product — behavior tells you what they do, interviews tell you what they think they do. The truth is usually in the gap between those two."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- P7 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·07</span>
+          <div>
+            <div class="q-text">How would you write a user story for a data scientist who wants to train a model on Teradata Vantage?</div>
+            <div class="q-tags"><span class="q-tag product">Execution</span><span class="q-tag technical">Analytics-Specific</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Show Domain + PM Craft</div>
+          <div class="answer-text">
+            <p>"Here's how I'd structure it:"</p>
+            <div class="structure-block">
+              <span class="label">Sample User Story</span>
+              <strong>As a</strong> data scientist at a retail enterprise using VantageCloud,<br>
+              <strong>I want to</strong> train a binary classification model directly in the database using my existing feature table,<br>
+              <strong>So that</strong> I don't have to export data to an external environment, reducing data movement costs and cutting training time from hours to minutes for our 50M-row customer dataset.<br><br>
+              <strong>Acceptance Criteria:</strong><br>
+              ✓ User can select an existing Teradata table as training input from the ClearScape notebook environment.<br>
+              ✓ Model training runs in-database with no data export step.<br>
+              ✓ Training job completion time is visible in the UI.<br>
+              ✓ Trained model artifact is stored in the ModelOps registry automatically.<br>
+              ✓ Error messages are human-readable, not raw stack traces.<br><br>
+              <strong>Out of scope for v1:</strong> AutoML hyperparameter tuning, multi-GPU training.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P8 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">P·08</span>
+          <div>
+            <div class="q-text">If you had to suggest one improvement to an analytics platform's onboarding experience, what would it be and why?</div>
+            <div class="q-tags"><span class="q-tag product">Product Sense</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"The single highest-leverage improvement for most analytics platforms is a guided 'first value moment' — what I'd call the zero-to-insight path."</p>
+            <p>"Most enterprise analytics tools drop users into a blank canvas after signup. The cognitive load of 'where do I start?' kills activation. What works: a short (3-step) onboarding that connects the user's own data to a specific, pre-built use case output — 'you've just scored your customer churn risk' — before they ever see the full interface."</p>
+            <p>"For ClearScape specifically, the ClearScape Analytics Experience environment on Jupyter notebooks is brilliant for technical users. But there's likely a segment of business users who'll never open a notebook. I'd invest in a guided, no-code use-case launcher that takes you from 'connect your data source' to 'here's a fraud risk score on your first 1,000 records' in under 10 minutes, with no SQL required. KNIME integration is already moving in this direction, which tells me Teradata has seen this gap too."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════ TECHNICAL ═══════════════════════════════════════ -->
+    <div class="section" id="technical">
+      <div class="section-header">
+        <div class="section-icon icon-technical">⚙️</div>
+        <h2 class="section-title">Technical & Analytics Questions</h2>
+      </div>
+      <p class="section-desc">Jefferson manages ClearScape Analytics — expect real technical substance. You won't be expected to be a data engineer, but you need to be credible.</p>
+
+      <!-- T1 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·01</span>
+          <div>
+            <div class="q-text">What is ModelOps and why does it matter for enterprise AI?</div>
+            <div class="q-tags"><span class="q-tag technical">ClearScape</span><span class="q-tag company">Teradata-Specific</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — This is Core to ClearScape</div>
+          <div class="answer-text">
+            <p>"ModelOps is the operational discipline of managing AI/ML models after they leave the data scientist's notebook — through deployment, monitoring, governance, retraining, and retirement. It's the production half of the ML lifecycle that's almost always more complex than the training half."</p>
+            <div class="structure-block">
+              <span class="label">Why It Matters — The Enterprise Problem</span>
+              The dirty secret of enterprise AI: most models trained never make it to production. Of those that do, most degrade silently over time without anyone noticing until there's a business impact.<br><br>
+              <strong>ModelOps solves:</strong><br>
+              • <strong>Deployment friction:</strong> Going from notebook to production typically requires significant reengineering. ModelOps standardizes that path.<br>
+              • <strong>Model drift:</strong> Real-world data distribution changes. A fraud model trained on 2023 data may miss 2024 fraud patterns. ModelOps automates drift detection and triggers retraining.<br>
+              • <strong>Governance & audit:</strong> Regulated industries (banking, insurance) need to explain model decisions. ModelOps provides the audit trail.<br>
+              • <strong>Scale:</strong> Teradata's ModelOps can operationalize millions of models — think demand forecasting for every SKU at a global retailer.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·02</span>
+          <div>
+            <div class="q-text">What's the difference between in-database analytics and traditional ML pipelines? Why does it matter?</div>
+            <div class="q-tags"><span class="q-tag technical">ClearScape</span><span class="q-tag technical">Architecture</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Teradata's Core Differentiator</div>
+          <div class="answer-text">
+            <div class="structure-block">
+              <span class="label">Traditional ML Pipeline</span>
+              Data sits in a warehouse/lake → Extract it → Transfer to a separate ML platform (e.g., SageMaker, Databricks) → Train model there → Push results back to the database.<br><br>
+              <strong>Problems:</strong> Data movement is expensive (storage, compute, licensing). Latency. Security/governance gaps when data leaves the system. Complexity of maintaining two platforms.
+            </div>
+            <div class="structure-block">
+              <span class="label">In-Database Analytics (ClearScape Approach)</span>
+              Data stays in VantageCloud. Analytics functions execute directly on the data where it lives. Model trains in-database. Scoring runs in-database.<br><br>
+              <strong>Benefits:</strong> Zero data movement cost. No latency from data transfer. Full governance maintained. Performance scales with Teradata's workload management, not a separate system.
+            </div>
+            <p>"For a retailer forecasting demand for 10 million SKUs, the cost difference between moving that data out vs. computing in place isn't marginal — it's orders of magnitude. That's why Teradata's positioning resonates with large enterprise customers."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T3 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·03</span>
+          <div>
+            <div class="q-text">What is BYOM (Bring Your Own Model) and when would a customer use it?</div>
+            <div class="q-tags"><span class="q-tag technical">ClearScape</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"BYOM allows customers to import models trained outside of Teradata — in frameworks like TensorFlow, PyTorch, scikit-learn, or on platforms like Databricks — and operationalize them inside VantageCloud."</p>
+            <p><strong>When a customer uses it:</strong></p>
+            <div class="structure-block">
+              <span class="label">BYOM Use Cases</span>
+              1. <strong>Existing model investment:</strong> A company has already trained 200 models in Databricks. They're migrating to VantageCloud but don't want to retrain everything. BYOM imports those models and runs them in-database for scoring.<br><br>
+              2. <strong>Specialized models:</strong> Some use cases (NLP, computer vision) require specialized frameworks that aren't natively in ClearScape. BYOM lets data scientists use the best tool for training, but operationalize in Teradata for scale and governance.<br><br>
+              3. <strong>Open-source ecosystem:</strong> Teams that prefer scikit-learn or XGBoost can continue using familiar tools while benefiting from Teradata's operational platform.
+            </div>
+            <p>"It's essentially Teradata saying: we're not asking you to abandon your existing model investments. We're asking you to operationalize them here, where the data is."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T4 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·04</span>
+          <div>
+            <div class="q-text">How would you explain what a data warehouse is to a non-technical business stakeholder?</div>
+            <div class="q-tags"><span class="q-tag technical">Fundamentals</span><span class="q-tag behavioral">Communication</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Imagine your company generates data from dozens of different systems — your CRM, your e-commerce platform, your ERP, your support ticketing tool. All of those systems store data in ways optimized for their specific job, not for answering cross-system business questions."</p>
+            <p>"A data warehouse is a single, purpose-built environment where all that data is brought together, cleaned, and structured so you can answer questions like 'which customer segment has the highest LTV and what's our churn risk in that segment right now?' — questions that no single operational system could answer alone."</p>
+            <p>"Teradata's Vantage is a data warehouse built for the scale that global enterprises actually operate at — billions of rows, thousands of concurrent users — where the answers need to come back in seconds, not hours."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T5 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·05</span>
+          <div>
+            <div class="q-text">What is model drift and how would you detect it?</div>
+            <div class="q-tags"><span class="q-tag technical">ML Concepts</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Model drift is when a machine learning model's performance degrades over time because the real-world data it's scoring has changed from the data it was trained on."</p>
+            <div class="structure-block">
+              <span class="label">Types of Drift</span>
+              <strong>Data drift (covariate shift):</strong> The input feature distribution changes. E.g., a credit scoring model trained pre-COVID encounters very different income patterns post-COVID.<br><br>
+              <strong>Concept drift:</strong> The relationship between inputs and target changes. E.g., a fraud model trained on 2023 fraud patterns may miss new fraud techniques that emerged in 2024.<br><br>
+              <strong>Label drift:</strong> The distribution of outcomes changes — e.g., if actual churn rates in your business shift seasonally.
+            </div>
+            <div class="structure-block">
+              <span class="label">Detection Methods</span>
+              • Monitor model performance metrics (accuracy, AUC, precision-recall) on a held-out validation set over time.<br>
+              • Track input feature statistics (mean, variance, distribution shape) and alert when they deviate beyond a threshold.<br>
+              • Use population stability index (PSI) to compare score distributions between training and current scoring windows.<br>
+              • ClearScape ModelOps automates this monitoring and can trigger retraining workflows when drift thresholds are crossed.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T6 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·06</span>
+          <div>
+            <div class="q-text">Write a SQL query to find the top 5 customers by revenue in the last 30 days who have not placed an order in the last 7 days — these might be churn risks.</div>
+            <div class="q-tags"><span class="q-tag technical">SQL</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Show Your SQL Fluency</div>
+          <div class="answer-text">
+            <div class="structure-block">
+              <span class="label">SQL Query</span>
+              SELECT<br>
+              &nbsp;&nbsp;c.customer_id,<br>
+              &nbsp;&nbsp;c.customer_name,<br>
+              &nbsp;&nbsp;SUM(o.order_value) AS revenue_last_30d,<br>
+              &nbsp;&nbsp;MAX(o.order_date) AS last_order_date<br>
+              FROM customers c<br>
+              JOIN orders o ON c.customer_id = o.customer_id<br>
+              WHERE o.order_date >= CURRENT_DATE - INTERVAL '30' DAY<br>
+              GROUP BY c.customer_id, c.customer_name<br>
+              HAVING MAX(o.order_date) < CURRENT_DATE - INTERVAL '7' DAY<br>
+              ORDER BY revenue_last_30d DESC<br>
+              FETCH FIRST 5 ROWS ONLY;
+            </div>
+            <p style="margin-top: 12px;">"In Teradata SQL specifically, FETCH FIRST n ROWS ONLY is the standard syntax for LIMIT. The HAVING clause filters post-aggregation — that's how we check the last order date after grouping. This query is useful as an early-warning list for a CSM team doing proactive outreach."</p>
+            <div class="tip-block tip">
+              <div class="icon">💡</div>
+              <div class="content">If Jefferson asks a follow-up: you could extend this with a <strong>window function</strong> — RANK() OVER (ORDER BY revenue_last_30d DESC) — or add a churn probability score JOIN if the ModelOps registry is accessible via SQL.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T7 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·07</span>
+          <div>
+            <div class="q-text">What's the difference between a supervised and unsupervised ML model? Give an example of when you'd use each in an analytics context.</div>
+            <div class="q-tags"><span class="q-tag technical">ML Concepts</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <div class="structure-block">
+              <span class="label">Supervised vs Unsupervised</span>
+              <strong>Supervised:</strong> You have labelled training data — inputs paired with known outputs. The model learns to predict the output for new inputs.<br>
+              Example in analytics: Churn prediction. You have historical records of customers who churned (label = 1) vs. retained (label = 0), plus their feature profiles. The model learns the pattern.<br><br>
+              <strong>Unsupervised:</strong> No labels. The model finds structure or patterns in the data on its own.<br>
+              Example in analytics: Customer segmentation. You don't know in advance how many customer types exist. A clustering algorithm (k-means) groups customers by behavioral similarity — then you interpret and name those clusters (e.g., "high-value loyalists," "price-sensitive casuals").
+            </div>
+            <p>"My lead-scoring model at Aasaan was supervised — I had clear conversion data as labels. A useful unsupervised complement would have been clustering the leads first to identify natural segments, then training separate classifiers per segment for higher precision."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T8 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·08</span>
+          <div>
+            <div class="q-text">What is the difference between precision and recall? Which matters more for a fraud detection use case?</div>
+            <div class="q-tags"><span class="q-tag technical">ML Metrics</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <div class="structure-block">
+              <span class="label">Definitions</span>
+              <strong>Precision:</strong> Of all transactions the model flagged as fraud, what % were actually fraud? High precision = few false alarms.<br><br>
+              <strong>Recall:</strong> Of all actual fraud cases in reality, what % did the model catch? High recall = few missed frauds.
+            </div>
+            <p><strong>For fraud detection — Recall usually matters more.</strong></p>
+            <p>"The cost of a missed fraud (false negative) — real financial loss, customer damage, regulatory exposure — is typically much higher than the cost of a false alarm (false positive, which costs analyst review time). So you want high recall: catch as much fraud as possible, even if you get some false alarms."</p>
+            <p>"However, if the precision is so low that analysts are drowning in false alarms, the system becomes unusable. In practice, you tune the decision threshold to find an acceptable precision-recall tradeoff, often guided by the business's cost ratio between missed fraud and investigation cost per alert."</p>
+            <p>"At Aasaan, I optimized for precision in my lead-scoring model — the cost of a false positive (wasting a sales rep's call) was higher than the cost of a false negative (missing a slightly lower-quality lead who might still convert)."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T9 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·09</span>
+          <div>
+            <div class="q-text">What is a time series and what kinds of business problems can you solve with time series analytics?</div>
+            <div class="q-tags"><span class="q-tag technical">Analytics Concepts</span><span class="q-tag company">ClearScape Feature</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — ClearScape has 50+ time series functions</div>
+          <div class="answer-text">
+            <p>"A time series is a sequence of data points indexed in time order — stock prices at minute intervals, daily active users, weekly sales figures, sensor readings every millisecond."</p>
+            <div class="structure-block">
+              <span class="label">Business Problems Solved by Time Series Analytics</span>
+              <strong>Demand forecasting:</strong> Predict future sales/demand for inventory planning — a retailer forecasting SKU-level demand across millions of products.<br><br>
+              <strong>Anomaly detection:</strong> Identify unusual patterns — IoT sensor readings that deviate from normal operating ranges predict equipment failure before it happens (predictive maintenance).<br><br>
+              <strong>Trend & seasonality analysis:</strong> Decompose revenue signals to understand what's structural growth vs. seasonal vs. noise.<br><br>
+              <strong>Real-time fraud detection:</strong> Score transactions in time-ordered sequence to detect patterns that look normal in isolation but fraudulent in sequence.<br><br>
+              <strong>User engagement patterns:</strong> Model how product engagement evolves over the customer lifetime to predict churn.
+            </div>
+            <p>"ClearScape Analytics offers 50+ in-database time series functions — this is one of its most distinctive capabilities, because processing millions of time series at scale is extremely expensive to do outside the database."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- T10 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">T·10</span>
+          <div>
+            <div class="q-text">What is AutoML and what are its limitations?</div>
+            <div class="q-tags"><span class="q-tag technical">ML Concepts</span><span class="q-tag company">ClearScape Feature</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"AutoML automates the process of selecting, training, and tuning machine learning models — historically the most time-intensive and expertise-dependent parts of building an ML solution. Instead of a data scientist manually trying 20 algorithm configurations, AutoML runs them systematically and surfaces the best performer."</p>
+            <p><strong>ClearScape's AutoML</strong> specifically is designed to enable non-technical business users to kick off model training without coding, while maintaining the governance and scale of VantageCloud underneath.</p>
+            <div class="structure-block">
+              <span class="label">Limitations of AutoML (Be Honest)</span>
+              <strong>Not a domain knowledge substitute:</strong> AutoML will find the best model for the data you give it. If your features are poorly engineered or your training data has label leakage, AutoML will faithfully optimize a broken model.<br><br>
+              <strong>Black box risk:</strong> Auto-selected models may be harder to explain to regulators or business stakeholders. Explainability often requires manual intervention.<br><br>
+              <strong>Diminishing returns:</strong> For simple problems, AutoML is overkill. For very complex or novel problems, expert data scientists will still outperform it by knowing which architectures to try.<br><br>
+              <strong>Compute cost:</strong> AutoML's search process is computationally expensive. Important to scope it appropriately.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════ COMPANY FIT ═══════════════════════════════════════ -->
+    <div class="section" id="company">
+      <div class="section-header">
+        <div class="section-icon icon-company">🏢</div>
+        <h2 class="section-title">Company & Role Fit</h2>
+      </div>
+      <p class="section-desc">Show you've done the research and that Teradata isn't just "a job" — you understand their market position and Jefferson's specific product area.</p>
+
+      <!-- C1 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">C·01</span>
+          <div>
+            <div class="q-text">Why Teradata specifically? There are lots of data companies — Snowflake, Databricks, AWS. Why us?</div>
+            <div class="q-tags"><span class="q-tag company">Motivation</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Specific, Not Generic</div>
+          <div class="answer-text">
+            <p>"Three things, in order of importance to me:"</p>
+            <p><strong>1. The real problem Teradata is solving:</strong> Enterprise AI failing in production isn't a technical problem, it's an operationalization problem. ClearScape Analytics attacks the deployment-and-scale half of AI — the half that 80% of enterprise ML projects fail at. That's where I want to be."</p>
+            <p><strong>2. Open-source direction:</strong> The BYOM capability and KNIME integration signal that Teradata understands the ecosystem play. You're not trying to lock customers into a proprietary toolchain — you're meeting data scientists where they already work. That's a PM philosophy I respect."</p>
+            <p><strong>3. Jefferson's team specifically:</strong> Working on ClearScape Analytics means I'm directly at the intersection of the analytics lifecycle, open-source integration, and the enterprise customer. That's the most technically interesting and most business-critical part of the platform."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- C2 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">C·02</span>
+          <div>
+            <div class="q-text">This role says "support senior PMs" — you've been an APM already. Are you comfortable with that structure?</div>
+            <div class="q-tags"><span class="q-tag company">Role Fit</span><span class="q-tag behavioral">Humility</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Address the Seniority Question Directly</div>
+          <div class="answer-text">
+            <p>"Completely. My APM experience at Enigma is in a startup context — a team of 10, early-stage product. Teradata's product complexity and enterprise scale are categorically different. I'd be learning more in 6 months here about enterprise analytics PM than in 2 more years at a startup."</p>
+            <p>"What I bring to a supporting role isn't experience at this scale — I'm honest about that. What I bring is a working foundation: I've shipped features, written PRDs, run discovery, worked cross-functionally, and I have real analytical depth from building and deploying ML models myself. I can contribute meaningfully from day one while absorbing a lot from the senior PMs."</p>
+            <p>"I think of this role the same way I think about any new domain — establish credibility fast by delivering on the basics, earn latitude by showing judgment."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- C3 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">C·03</span>
+          <div>
+            <div class="q-text">What do you know about VantageCloud and how it differs from Teradata's on-premise offerings?</div>
+            <div class="q-tags"><span class="q-tag company">Product Knowledge</span><span class="q-tag technical">Platform</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <div class="structure-block">
+              <span class="label">VantageCloud Key Points</span>
+              <strong>Cloud-native architecture:</strong> Built on elastic compute + low-cost object storage at its core. Scales up/down automatically — very different from on-premise where you buy capacity upfront.<br><br>
+              <strong>Cost model shift:</strong> From CapEx (buy hardware) to OpEx (pay for what you use). Teradata's adaptive cost optimizer is designed to make cloud economics predictable at enterprise scale.<br><br>
+              <strong>Multi-cloud:</strong> VantageCloud supports AWS, Azure, and GCP — giving customers cloud flexibility and avoiding vendor lock-in to a single hyperscaler.<br><br>
+              <strong>VantageCloud Lake specifically:</strong> The latest offering, focused on open table formats (OTFs) and workload isolation. Designed to support both traditional analytics and AI/ML workloads on the same platform with governance guardrails.<br><br>
+              <strong>ClearScape is included:</strong> Not a separate add-on — analytics capabilities are embedded in VantageCloud, which simplifies the licensing model for customers.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C4 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">C·04</span>
+          <div>
+            <div class="q-text">What industries are most important to Teradata's enterprise customer base and why?</div>
+            <div class="q-tags"><span class="q-tag company">Market Knowledge</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Teradata's customer base skews heavily toward industries where data volume is massive, decisions are high-stakes, and analytical errors are expensive:"</p>
+            <ul class="checklist">
+              <li><strong>Financial Services / Banking:</strong> Fraud detection at millions of transactions/second, credit risk scoring, regulatory compliance reporting. Real-time, in-database analytics are non-negotiable here.</li>
+              <li><strong>Telecommunications:</strong> Network performance analytics, customer churn prediction at massive subscriber scale, predictive maintenance of infrastructure.</li>
+              <li><strong>Retail:</strong> Demand forecasting across millions of SKUs, personalization, supply chain optimization.</li>
+              <li><strong>Healthcare / Life Sciences:</strong> Clinical trial analytics, patient outcome prediction, operational efficiency.</li>
+              <li><strong>Government / Public Sector:</strong> Large-scale population data analysis, fraud detection in benefit programs.</li>
+            </ul>
+            <p>"The common thread is scale + governance + real-time requirements. These are domains where Snowflake or a startup analytics tool isn't a realistic option for the core use cases."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- C5 -->
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">C·05</span>
+          <div>
+            <div class="q-text">What's one thing about the analytics platform market that you think Teradata should be paying more attention to?</div>
+            <div class="q-tags"><span class="q-tag company">Strategic Thinking</span><span class="q-tag product">Bold Opinion</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Show Strategic Boldness</div>
+          <div class="answer-text">
+            <p>"The rise of agentic AI — LLMs that don't just answer queries but autonomously take actions based on data — is creating a new category of analytics infrastructure need that most enterprise vendors are only beginning to address."</p>
+            <p>"Enterprises will increasingly want to deploy AI agents that query their VantageCloud data, run analyses, make decisions, and trigger workflows — all in real-time, at scale. The question is: does VantageCloud become the trusted data layer for those agents, or does the agent ecosystem build around a different infrastructure?"</p>
+            <p>"Teradata's governance story — data trust, audit trails, access controls — is actually a perfect fit for agentic AI, because enterprises are terrified of ungoverned AI agents making consequential decisions. That's an opportunity to position ModelOps and VantageCloud as the enterprise's 'trusted AI operating system' rather than just an analytics platform."</p>
+            <div class="tip-block warn">
+              <div class="icon">⚠</div>
+              <div class="content">Frame this as an <strong>opportunity</strong>, not a criticism. "One area I find exciting for Teradata's positioning is..." works better than "Teradata should be worried about..."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════ YOUR QUESTIONS ═══════════════════════════════════════ -->
+    <div class="section" id="closing">
+      <div class="section-header">
+        <div class="section-icon icon-closing">💬</div>
+        <h2 class="section-title">Your Questions to Ask Jefferson</h2>
+      </div>
+      <p class="section-desc">Always ask 3–4 thoughtful questions. This signals genuine interest and gives you information to evaluate the role. Pick questions that couldn't be Googled.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">Q·01</span>
+          <div>
+            <div class="q-text">"What does a great first 90 days look like for someone in this role — what would make you say 'this hire was the right call'?"</div>
+            <div class="q-tags"><span class="q-tag company">Role Clarity</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>This tells you what Jefferson actually values in the role — which may differ from the JD. It shows you're thinking about impact from day one, not just getting the offer. Whatever he says becomes your roadmap if you get the job.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">Q·02</span>
+          <div>
+            <div class="q-text">"You focus on open-source analytics solutions — how do you balance supporting the open-source ecosystem with Teradata's proprietary capabilities? Is there tension there?"</div>
+            <div class="q-tags"><span class="q-tag technical">Product Strategy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>This is directly relevant to Jefferson's own role and signals you've read his LinkedIn profile carefully. It also gives you genuine insight into how Teradata navigates a real strategic tension — and how Jefferson thinks about product strategy. Great rapport-builder for a PM who works on this problem daily.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">Q·03</span>
+          <div>
+            <div class="q-text">"What's a customer problem you're working on right now in ClearScape Analytics that you haven't fully solved yet?"</div>
+            <div class="q-tags"><span class="q-tag product">Discovery</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>This is the most powerful question you can ask. It invites Jefferson to talk about his actual work, which is what he cares about most. It shows you're thinking like a PM (user problem first), not just a job seeker. His answer will tell you a lot about the team's culture and where you'd actually spend your time.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-number">Q·04</span>
+          <div>
+            <div class="q-text">"I noticed you have a passion for history and documentaries — I'm quite interested in history myself. Has studying history ever influenced how you think about product strategy?"</div>
+            <div class="q-tags"><span class="q-tag behavioral">Rapport</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This — Use Sparingly, at the Right Moment</div>
+          <div class="answer-text">
+            <p>Jefferson's LinkedIn mentions his love of world history and documentaries. This is a genuine shared interest for you. Used naturally at the end of the conversation, it creates a memorable, human moment that most candidates never have. Don't force it — only ask if the conversation feels warm and open. If it comes up naturally earlier, even better.</p>
+            <div class="tip-block success">
+              <div class="icon">✓</div>
+              <div class="content">This is the question most candidates will <strong>never</strong> ask. It's the one Jefferson will remember.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- METRICS CHEAT SHEET -->
+    <div class="section" id="cheatsheet">
+      <div class="section-header">
+        <div class="section-icon icon-resume">📊</div>
+        <h2 class="section-title">Your Metrics Cheat Sheet</h2>
+      </div>
+      <p class="section-desc">Know every number cold. Jefferson may ask about any of these mid-conversation.</p>
+
+      <div class="metric-row">
+        <div class="metric-chip"><strong>↑38%</strong><span>Sprint rework reduction (Enigma)</span></div>
+        <div class="metric-chip"><strong>↓21.8%</strong><span>Churn reduction (Aasaan App)</span></div>
+        <div class="metric-chip"><strong>↑46%</strong><span>Sales efficiency lift (Aasaan App)</span></div>
+        <div class="metric-chip"><strong>↑400%</strong><span>Team revenue in 4 months (MyCaptain)</span></div>
+        <div class="metric-chip"><strong>↑16%</strong><span>CVR improvement (Aasaan)</span></div>
+        <div class="metric-chip"><strong>↑24%</strong><span>CTR lift (Aasaan)</span></div>
+        <div class="metric-chip"><strong>2.3×</strong><span>Conversion rate lift: 3%→7% (MyCaptain)</span></div>
+        <div class="metric-chip"><strong>6+</strong><span>Engineering cycles with zero rework (Enigma)</span></div>
+        <div class="metric-chip"><strong>3 sprints</strong><span>Community v1 shipped (Enigma)</span></div>
+        <div class="metric-chip"><strong>₹2L→₹10L</strong><span>Revenue growth (MyCaptain)</span></div>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <div class="tip-block success">
+          <div class="icon">✓</div>
+          <div class="content"><strong>Final Reminders:</strong><br>
+          • Start answers with the business context, not the action. Jefferson cares about why you did something more than what you did.<br>
+          • Never overclaim. Show you understand what you can and can't attribute to yourself.<br>
+          • Every metric should have a "so what" — what did it mean for the business?<br>
+          • When in doubt: pause, think, then answer. Silence is better than a rambling non-answer.<br>
+          • Arrive knowing ClearScape Analytics inside out — clearscape.teradata.com has a free demo environment.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-section">
+      <h2>Pre-Interview Checklist</h2>
+      <ul class="checklist">
+        <li>Review ClearScape Analytics product page + Teradata blog</li>
+        <li>Explore ClearScape Analytics Experience demo (clearscape.teradata.com)</li>
+        <li>Read Jefferson Uy's LinkedIn posts for recent thinking</li>
+        <li>Know your 4 core metrics cold — no hesitation</li>
+        <li>Prepare one STAR story per metric you've claimed</li>
+        <li>Know the difference between VantageCloud Lake vs. VantageCloud Enterprise</li>
+        <li>Have 3 questions ready — don't ask about salary/benefits in this round</li>
+        <li>Dress professionally — this is likely a video call from Hyderabad</li>
+        <li>Quiet environment, test audio/video 30 minutes before</li>
+      </ul>
+      <div style="margin-top: 24px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted);">
+        Guide prepared for Yashwanth Reddy Yatham · Teradata APM (Analytics) Interview · Jefferson Uy, ClearScape Analytics PM
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Toggle Q&A
+  function toggle(card) {
+    card.classList.toggle('open');
+    updateProgress();
+  }
+
+  // Sidebar nav
+  function setActive(el) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Progress tracking
+  function updateProgress() {
+    const total = document.querySelectorAll('.q-card').length;
+    const opened = document.querySelectorAll('.q-card.open').length;
+    const pct = Math.round((opened / total) * 100);
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = opened + ' of ' + total + ' questions reviewed';
+  }
+
+  // Scroll to top button
+  const scrollBtn = document.getElementById('scrollTop');
+  const main = document.querySelector('.main');
+  main.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', main.scrollTop > 300);
+
+    // Update active nav based on scroll
+    const sections = ['intro','behavioral','resume','product','technical','company','closing','cheatsheet'];
+    let current = 'intro';
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 200) current = id;
+    }
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('href') === '#' + current);
+    });
+  });
+
+  // Smooth scroll for nav items
+  document.querySelectorAll('.nav-item[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({behavior: 'smooth'});
+    });
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
