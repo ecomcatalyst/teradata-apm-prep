@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raj Sundaram Interview Guide — Yashwanth</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04080f;
+    --surface: #080f1c;
+    --surface2: #0d1929;
+    --border: #162035;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --text-muted: #475569;
+    --text-dim: #8b9ab5;
+    --glow: rgba(0,212,255,0.15);
+    --glow2: rgba(124,58,237,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(0,212,255,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.05) 0%, transparent 50%),
+      linear-gradient(rgba(0,212,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ═══ SIDEBAR ═══ */
+  .sidebar {
+    width: 270px;
+    min-width: 270px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 24px 20px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), transparent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .round-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+
+  .sidebar-header .sub {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* Progress */
+  .progress-wrap {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-track {
+    background: var(--border);
+    border-radius: 4px;
+    height: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 5px;
+  }
+
+  /* Nav */
+  .sidebar-nav {
+    padding: 12px 0;
+    flex: 1;
+  }
+
+  .nav-group-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 10px 20px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 12.5px;
+    font-family: 'Fira Code', monospace;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    background: rgba(0,212,255,0.05);
+    border-left-color: var(--accent);
+    color: var(--text);
+  }
+
+  .nav-icon { font-size: 13px; flex-shrink: 0; }
+
+  .nav-count {
+    margin-left: auto;
+    font-size: 9px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 8px;
+  }
+
+  /* ═══ MAIN ═══ */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    padding: 56px 60px 44px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: 'ROUND 2';
+    position: absolute;
+    right: 40px;
+    bottom: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 100px;
+    color: rgba(0,212,255,0.03);
+    letter-spacing: 8px;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+    50% { opacity: 0.3; box-shadow: none; }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 14px;
+    max-width: 600px;
+    margin-bottom: 28px;
+  }
+
+  .alert-box {
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 13.5px;
+    color: #fca5a5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    max-width: 680px;
+  }
+
+  .alert-box .icon { font-size: 16px; flex-shrink: 0; }
+
+  .stats-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 17px;
+    color: var(--accent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+  }
+
+  .stat span { color: var(--text-muted); font-size: 10px; }
+
+  /* ═══ INTERVIEWER PROFILE ═══ */
+  .interviewer-section {
+    margin: 32px 60px 0;
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(0,212,255,0.04));
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 14px;
+    padding: 28px;
+  }
+
+  .interviewer-header {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .interviewer-avatar {
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(124,58,237,0.3);
+  }
+
+  .interviewer-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .interviewer-role {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+
+  .career-timeline {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .timeline-chip {
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: #a78bfa;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .timeline-chip::before {
+    content: attr(data-year);
+    color: var(--text-muted);
+    font-size: 9px;
+  }
+
+  .interviewer-intel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .intel-card {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .intel-card h4 {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .intel-card p {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ═══ SECTION ═══ */
+  .section {
+    padding: 52px 60px 0;
+    scroll-margin-top: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .section-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  .section-desc {
+    font-family: 'Fira Code', monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    padding-left: 4px;
+    line-height: 1.6;
+  }
+
+  /* ═══ QUESTION CARD ═══ */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .q-card:hover {
+    border-color: rgba(0,212,255,0.2);
+    box-shadow: 0 0 20px rgba(0,212,255,0.04);
+  }
+
+  .q-card.open {
+    border-color: rgba(0,212,255,0.25);
+  }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .q-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 5px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .q-num.purple { color: var(--accent2); background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.2); }
+  .q-num.green { color: var(--accent3); background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); }
+  .q-num.amber { color: var(--accent4); background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); }
+  .q-num.red { color: var(--danger); background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
+
+  .q-content { flex: 1; }
+
+  .q-text {
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 5px;
+  }
+
+  .q-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .q-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    padding: 1px 7px;
+    border-radius: 8px;
+    border: 1px solid;
+  }
+
+  .tag-b { background: rgba(0,212,255,0.07); border-color: rgba(0,212,255,0.2); color: var(--accent); }
+  .tag-s { background: rgba(124,58,237,0.07); border-color: rgba(124,58,237,0.2); color: #a78bfa; }
+  .tag-t { background: rgba(16,185,129,0.07); border-color: rgba(16,185,129,0.2); color: var(--accent3); }
+  .tag-r { background: rgba(245,158,11,0.07); border-color: rgba(245,158,11,0.2); color: var(--accent4); }
+  .tag-p { background: rgba(239,68,68,0.07); border-color: rgba(239,68,68,0.2); color: #fca5a5; }
+
+  .q-chevron {
+    font-size: 11px;
+    color: var(--text-muted);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .q-card.open .q-chevron { transform: rotate(180deg); }
+
+  .q-body {
+    display: none;
+    padding: 0 22px 22px;
+    border-top: 1px solid var(--border);
+  }
+
+  .q-card.open .q-body { display: block; }
+
+  .answer-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 14px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .answer-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .answer-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+
+  .answer-text strong { color: var(--text); }
+  .answer-text .hi { color: var(--accent); font-weight: 600; }
+  .answer-text .hi2 { color: #a78bfa; font-weight: 600; }
+  .answer-text .hi3 { color: var(--accent3); font-weight: 600; }
+  .answer-text p { margin-bottom: 12px; }
+  .answer-text p:last-child { margin-bottom: 0; }
+
+  /* CODE / STRUCTURE BLOCK */
+  .code-block {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .code-block .label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .code-block .label.purple { color: var(--accent2); }
+
+  /* CALLOUT BLOCKS */
+  .callout {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .callout.info { background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.15); }
+  .callout.warn { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); }
+  .callout.danger { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); }
+  .callout.success { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); }
+
+  .callout .icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .callout .body { color: var(--text-dim); }
+  .callout .body strong { color: var(--text); }
+
+  /* METRICS */
+  .metrics-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+  }
+
+  .m-chip {
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+  }
+
+  .m-chip strong {
+    display: block;
+    color: var(--accent3);
+    font-size: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+  }
+
+  .m-chip span { color: var(--text-muted); font-size: 9px; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 52px 60px 0;
+    opacity: 0.6;
+  }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; margin: 10px 0; }
+
+  .checklist li {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    align-items: flex-start;
+  }
+
+  .checklist li::before {
+    content: '›';
+    color: var(--accent);
+    font-family: 'Fira Code', monospace;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* SCROLL TOP */
+  .scroll-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 42px; height: 42px;
+    background: var(--accent2);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: white;
+    box-shadow: 0 0 20px rgba(124,58,237,0.4);
+  }
+
+  .scroll-top.visible { opacity: 1; }
+
+  /* FOOTER */
+  .footer-section {
+    padding: 52px 60px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  .footer-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .hero, .section, .divider, .footer-section { padding-left: 24px; padding-right: 24px; }
+    .interviewer-section { margin-left: 24px; margin-right: 24px; }
+    .interviewer-intel { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="round-badge">Round 2 · Senior Director</div>
+      <h2>Raj Sundaram Interview Guide</h2>
+      <div class="sub">Sr. Director of Product · Teradata</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+      <div class="progress-text" id="progress-label">0 of 43 questions reviewed</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">Sections</div>
+
+      <a class="nav-item active" href="#intro" onclick="setActive(this)">
+        <span class="nav-icon">🎯</span> Interviewer Brief
+      </a>
+      <a class="nav-item" href="#elevation" onclick="setActive(this)">
+        <span class="nav-icon">🔺</span> Round 1 → Round 2 Shift <span class="nav-count">4</span>
+      </a>
+      <a class="nav-item" href="#strategic" onclick="setActive(this)">
+        <span class="nav-icon">♟️</span> Strategic Thinking <span class="nav-count">8</span>
+      </a>
+      <a class="nav-item" href="#agentic" onclick="setActive(this)">
+        <span class="nav-icon">🤖</span> Agentic AI Deep Dive <span class="nav-count">7</span>
+      </a>
+      <a class="nav-item" href="#leadership" onclick="setActive(this)">
+        <span class="nav-icon">👁</span> Leadership & Judgment <span class="nav-count">7</span>
+      </a>
+      <a class="nav-item" href="#resume" onclick="setActive(this)">
+        <span class="nav-icon">📄</span> Resume Under Raj's Lens <span class="nav-count">8</span>
+      </a>
+      <a class="nav-item" href="#meta" onclick="setActive(this)">
+        <span class="nav-icon">⚡</span> Meta-Style Questions <span class="nav-count">5</span>
+      </a>
+      <a class="nav-item" href="#closing" onclick="setActive(this)">
+        <span class="nav-icon">💬</span> Questions to Ask Raj <span class="nav-count">4</span>
+      </a>
+
+      <div class="nav-group-label" style="margin-top:6px;">Quick Ref</div>
+      <a class="nav-item" href="#cheat" onclick="setActive(this)">
+        <span class="nav-icon">📊</span> Metrics + Cheat Sheet
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-label">Round 2 Interview Guide</div>
+      <h1>Interview with <em>Raj Sundaram</em><br>Sr. Director of Product</h1>
+      <p class="hero-sub">This is a senior director with 15+ years at Meta, HP, Broadcom, and Agilent. He currently leads Teradata's <strong>Agentic AI Platform</strong> — the most strategic product bet in the company. This round will be fundamentally different from Round 1 with Jefferson.</p>
+
+      <div class="alert-box">
+        <div class="icon">⚠️</div>
+        <div><strong>Critical shift in register:</strong> Jefferson (Round 1) was a peer-level PM exploring execution fit. Raj is a Sr. Director evaluating whether you can think at a strategic level, handle ambiguity, and engage seriously with enterprise AI concepts. He will go deeper, faster, on every topic. Prepare to be challenged, not just assessed.</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat"><strong>15+</strong><span>Years experience</span></div>
+        <div class="stat"><strong>Meta → HP → TD</strong><span>Career trajectory</span></div>
+        <div class="stat"><strong>Agentic AI</strong><span>His current platform</span></div>
+        <div class="stat"><strong>MBA Chicago</strong><span>Business + Engineering</span></div>
+      </div>
+    </div>
+
+    <!-- INTERVIEWER PROFILE -->
+    <div class="interviewer-section">
+      <div class="interviewer-header">
+        <div class="interviewer-avatar">RS</div>
+        <div class="interviewer-info">
+          <h3>Raj Sundaram</h3>
+          <div class="interviewer-role">Sr. Director of Product · Teradata · Agentic AI Platform</div>
+          <div class="career-timeline">
+            <div class="timeline-chip" data-year="2025–">Teradata · Agentic AI</div>
+            <div class="timeline-chip" data-year="2022–25">Meta · Data & AI Infra</div>
+            <div class="timeline-chip" data-year="2018–22">HP · Product, UX & Analytics</div>
+            <div class="timeline-chip" data-year="2012–18">Broadcom · Product Mgmt</div>
+            <div class="timeline-chip" data-year="2004–12">Agilent Technologies</div>
+          </div>
+          <p style="font-size:13.5px; color: var(--text-dim);">At Meta, Raj led modernisation of their analytics-scale data warehouse into an AI-native, privacy-aware platform across WhatsApp, Instagram, Reality Labs, and GenAI products. At Teradata, he now leads the <strong style="color:var(--text)">Agentic Platform</strong> — autonomous AI agents grounded in Teradata's analytics data. Education: MBA from University of Chicago + MS Mechanical Engineering from Purdue.</p>
+        </div>
+      </div>
+
+      <div class="interviewer-intel">
+        <div class="intel-card">
+          <h4>🧠 How He Thinks</h4>
+          <p>Comes from both engineering (Purdue MS) and business strategy (Chicago MBA). Expects candidates to operate at both levels — technical enough to be credible, strategic enough to be interesting. His Meta experience means he thinks in terms of platform and scale.</p>
+        </div>
+        <div class="intel-card">
+          <h4>🎯 What He'll Test</h4>
+          <p>Strategic clarity on AI/data platforms. Your ability to discuss agentic AI seriously. Evidence you've thought about product at a systems level. He'll look past surface-level answers faster than Jefferson did — probe for depth.</p>
+        </div>
+        <div class="intel-card">
+          <h4>🔥 Hot Buttons</h4>
+          <p>Agentic AI is his life right now. Privacy and trust in AI (Meta background). Developer productivity. Platform thinking over feature thinking. Data governance at scale. Don't treat these as buzzwords — engage with the substance.</p>
+        </div>
+        <div class="intel-card">
+          <h4>⚡ Rapport Builders</h4>
+          <p>He followed Peter Yang (product leader & author) — signals interest in PM thought leadership. MBA background means he appreciates strategic framing. His Purdue engineering base means he respects technical depth. Mention his Agentic platform work specifically.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ ROUND SHIFT ═══ -->
+    <div class="section" id="elevation">
+      <div class="section-header">
+        <span class="section-num">00</span>
+        <h2 class="section-title">Round 1 → Round 2: The Shift in Register</h2>
+      </div>
+      <p class="section-desc">Four critical mindset shifts you must make before this conversation starts.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num red">SHIFT·01</span>
+          <div class="q-content">
+            <div class="q-text">From "execution" to "strategy" — what changes in how you frame everything</div>
+            <div class="q-tags"><span class="q-tag tag-p">Critical Mindset</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">What Changes</div>
+          <div class="answer-text">
+            <p>With Jefferson, you led with your execution track record — the 38%, the 21.8%, the sprints. That's the right register for a peer PM evaluating fit. <strong>Raj does not care primarily about execution metrics.</strong> He cares whether you have a point of view on where products should go and why.</p>
+            <div class="code-block">
+              <span class="label">Wrong Register (Jefferson-Level)</span>
+              "I cut sprint rework by 38% by introducing a requirement-clarification gate."<br><br>
+              <span class="label">Right Register (Raj-Level)</span>
+              "My thesis at Enigma was that ambiguity in requirements is a product management failure before it's an engineering problem. The 38% efficiency gain was the proof point — but the real change was shifting the team's mental model from 'build fast' to 'validate early.' At Teradata's scale, that same principle applies to AI feature development where wrong assumptions are far more expensive to unwind."
+            </div>
+            <p>Notice: same facts, completely different lens. Raj wants the <strong>so what for the world</strong>, not just for your team.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num red">SHIFT·02</span>
+          <div class="q-content">
+            <div class="q-text">How to open this conversation — the "connect Jefferson to Raj" bridge</div>
+            <div class="q-tags"><span class="q-tag tag-p">Opening Move</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Your Opening Move</div>
+          <div class="answer-text">
+            <p>Raj likely knows you spoke with Jefferson. One of the most powerful things you can do is reference that conversation to establish continuity — it signals you're serious, you retained everything, and you're not starting from zero.</p>
+            <div class="code-block">
+              <span class="label">Opening Line (adapt naturally)</span>
+              "My conversation with Jefferson last round covered the Analytics PM execution side of the role well — product demos, user stories, ClearScape's positioning versus Databricks. I've been thinking a lot since then about where your Agentic AI Platform sits in relation to ClearScape and what the product challenges might look like at that intersection. I'd love to hear your perspective on how the two platforms evolve together."
+            </div>
+            <p>This does three things: shows preparation, gives Raj something to react to, and positions you as someone who thinks in platform relationships — exactly his frame.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num red">SHIFT·03</span>
+          <div class="q-content">
+            <div class="q-text">The Meta experience — how Raj will filter your answers through it</div>
+            <div class="q-tags"><span class="q-tag tag-p">Interviewer Lens</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Understanding His Frame of Reference</div>
+          <div class="answer-text">
+            <p>At Meta, Raj led modernisation of a petabyte-scale analytics data warehouse into an AI-native, privacy-aware platform used by WhatsApp, Instagram, Reality Labs, and GenAI products. This background gives him three strong intuitions he will apply to your answers:</p>
+            <div class="code-block">
+              <span class="label">Meta Intuitions He'll Filter With</span>
+              1. <strong>Scale intuition:</strong> "Does this candidate understand that problems look different at 1M users vs 1B?" He'll be skeptical of any solution that sounds like it doesn't scale.<br><br>
+              2. <strong>Privacy intuition:</strong> At Meta, data trust and governance were existential. When AI topics come up, he'll listen for whether you treat governance as an afterthought or a first-class product requirement.<br><br>
+              3. <strong>Platform intuition:</strong> Meta doesn't build features — they build platforms that enable features. He'll listen for whether you think in systems or in individual features.
+            </div>
+            <p>When in doubt, ask yourself: "Does my answer sound like it would work at 10x the scale I described it at?" If yes, you're in Raj's register. If no, reframe.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num red">SHIFT·04</span>
+          <div class="q-content">
+            <div class="q-text">The "experience gap" — how to address it proactively with a Sr. Director</div>
+            <div class="q-tags"><span class="q-tag tag-p">Critical Handling</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Don't Ignore It — Own It With a Reframe</div>
+          <div class="answer-text">
+            <p>Raj has 15+ years. You have 2.5. That's not a problem you can hide — it's a dynamic you have to address directly if it comes up, because a Sr. Director will respect honesty and a specific plan far more than bravado or deflection.</p>
+            <div class="code-block">
+              <span class="label">If He Raises the Experience Gap</span>
+              "You're right that my years of experience are different from what you typically see at Teradata. What I'd offer instead is this: I've compressed a lot of learning into 2.5 years by being in roles that required me to operate above my grade — building ML systems at Aasaan, deploying a Pega CDH churn model at Enigma, owning discovery and delivery end-to-end. The specific depth in enterprise-scale data platforms, I'd be building here. But the judgment about what to build and why — the user empathy, the data-informed prioritisation, the ability to work cross-functionally — that I can bring immediately. And frankly, being an APM who comes in genuinely hungry to learn from a team like yours is a different kind of value than another 5-year PM who already thinks they know the answers."
+            </div>
+            <div class="callout warn">
+              <div class="icon">⚠️</div>
+              <div class="body"><strong>Don't oversell:</strong> Raj has a well-calibrated BS detector from decades at large companies. Honest scoping of your experience + clear articulation of what you bring + specific curiosity about the domain will land far better than claiming equivalence you don't have.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ STRATEGIC THINKING ═══ -->
+    <div class="section" id="strategic">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">Strategic Thinking Questions</h2>
+      </div>
+      <p class="section-desc">Raj will probe your ability to reason at the product strategy level. Answers that work for Jefferson won't cut it here — you need a clear point of view.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·01</span>
+          <div class="q-content">
+            <div class="q-text">How do you think about building a platform product versus a feature product? What's different about the PM role?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Platform Thinking</span><span class="q-tag tag-b">Strategic</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — This Is Core to Raj's World</div>
+          <div class="answer-text">
+            <p>"The fundamental difference is who your primary customer is. A feature product is built for end users who want a specific job done. A platform product is built for builders — developers, data scientists, product teams — who will use your platform to serve their own end users."</p>
+            <div class="code-block">
+              <span class="label">The PM Role Difference</span>
+              <strong>Feature PM:</strong> Optimises for user adoption and task completion. Success = users complete the job. Metrics: DAU, task success rate, NPS.<br><br>
+              <strong>Platform PM:</strong> Optimises for developer/builder adoption and ecosystem health. Success = builders build successfully on your platform and their products thrive. Metrics: API call volume, time-to-first-integration, ecosystem breadth, developer retention.<br><br>
+              <strong>Critical difference in prioritisation:</strong> On a feature, you can ship opinionated UX. On a platform, your design decisions become constraints for everyone who builds on top. Every choice has multiplied consequences — so you must be far more conservative about breaking changes, far more deliberate about abstractions, and far more focused on backward compatibility and API design than a feature PM ever needs to be.
+            </div>
+            <p>"Teradata's Agentic Platform is the clearest example of this: you're not building an AI agent — you're building the platform that lets AI agents reason about enterprise data reliably. The decisions you make at the platform level — what context is accessible, how trust is established, what governance hooks exist — determine what's even possible for every agent built on top."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·02</span>
+          <div class="q-content">
+            <div class="q-text">Where do you think enterprise AI will be in 3 years and what does that mean for Teradata's product strategy?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Vision</span><span class="q-tag tag-b">Strategic</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Have a Genuine POV</div>
+          <div class="answer-text">
+            <p>"Three thesis statements for 3 years from now:"</p>
+            <div class="code-block">
+              <span class="label">My 3-Year Enterprise AI Thesis</span>
+              <strong>1. Agentic workflows become the default interaction model.</strong> The "AI as chat assistant" moment is already passing. By 2028, AI agents that autonomously query data, form hypotheses, trigger actions, and report outcomes will be the standard interface for analytics. This means platforms that enable trustworthy, auditable agent reasoning on enterprise data become the critical infrastructure.<br><br>
+              <strong>2. Data trust and AI governance become existential differentiators.</strong> We'll see one or two high-profile enterprise AI failures — wrong decisions made by ungoverned agents — that create a massive market demand for "trusted AI." Companies with Teradata's governance lineage are uniquely positioned. The risk is that Teradata doesn't market this aggressively enough to win the narrative.<br><br>
+              <strong>3. The "build vs. buy" debate for AI infrastructure shifts to "integrate vs. replace."</strong> Most enterprises will not rip and replace their Teradata investments. They'll want to integrate LLMs and agents into their existing Vantage ecosystem. Teradata's winning move is making that integration frictionless — better than building from scratch on a hyperscaler.
+            </div>
+            <p><strong>What that means for Teradata:</strong> The Agentic Platform Raj is building isn't a side bet — it's the future core value proposition. ClearScape Analytics becomes the analytical engine that agents trust. VantageCloud becomes the data substrate. The question is whether Teradata makes the narrative shift fast enough from "enterprise data warehouse" to "enterprise AI operating system."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·03</span>
+          <div class="q-content">
+            <div class="q-text">How would you think about the build vs. buy vs. partner decision for a new AI capability at Teradata?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Strategic</span><span class="q-tag tag-b">Product Strategy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"This is ultimately a question about where your true differentiation lies and what you can defend over time."</p>
+            <div class="code-block">
+              <span class="label">Decision Framework</span>
+              <strong>Build when:</strong> The capability is core to your competitive differentiation and can't be adequately served by third-party solutions. At Teradata: in-database ML execution, workload-aware model scoring, ModelOps governance. These are defensible moats — build them.<br><br>
+              <strong>Buy/Acquire when:</strong> The market has already validated a specific capability and you need it now, not in 18 months. Building would distract engineering from your actual moat. Teradata's Aster Data acquisition (graph analytics) is the template here — buy adjacent capability, integrate deeply.<br><br>
+              <strong>Partner when:</strong> The capability is important but complementary, and the ecosystem wins if you don't own it. KNIME integration for no-code ML, open-source framework support (scikit-learn, XGBoost in BYOM) — these are better as partnerships because they expand the user base without building something Teradata isn't best positioned to maintain.<br><br>
+              <strong>The Agentic AI lens:</strong> The LLM layer (GPT-4o, Claude, Gemini) — partner/integrate, don't build. The data grounding layer (how agents query and trust Teradata data) — build. The governance/audit layer — build. The agent orchestration layer — potentially partner with emerging frameworks (LangGraph, CrewAI) while owning the Teradata-specific integration.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·04</span>
+          <div class="q-content">
+            <div class="q-text">What does "developer experience" mean for an enterprise data platform, and why does it matter for Teradata?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Platform</span><span class="q-tag tag-b">Developer-Led</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Raj Has Strong Views Here</div>
+          <div class="answer-text">
+            <p>"Developer experience (DX) is how quickly and confidently a developer can go from 'I need to solve this problem' to 'my solution is in production.' It has nothing to do with how many features the platform has — it's about friction, clarity, and trust."</p>
+            <div class="code-block">
+              <span class="label">DX Components for Enterprise Data Platforms</span>
+              <strong>Time to first value:</strong> How long from account creation to running a first meaningful query or model? Every minute of setup friction is a minute of potential churn. ClearScape Analytics Experience is a direct investment in this — a zero-setup sandbox environment.<br><br>
+              <strong>Documentation as product:</strong> In enterprise contexts, the developer reading your docs is often a consultant or a data scientist under deadline. Bad docs kill adoption faster than any feature gap. Treat docs as a product with their own backlog and success metrics.<br><br>
+              <strong>Error quality:</strong> What happens when something breaks? Cryptic stack traces destroy trust. Human-readable, actionable error messages are a DX investment with outsized ROI.<br><br>
+              <strong>Consistent APIs:</strong> Enterprise developers will interact with Teradata across SQL, Python APIs, REST endpoints, and potentially agent frameworks. Inconsistent patterns across these create cognitive overhead that accumulates into resentment.
+            </div>
+            <p>"Why it matters for Teradata specifically: the data scientist who struggles with Teradata's DX will advocate for Databricks in the next architecture review. The data scientist who finds it productive will defend Teradata when the CTO asks why they're not migrating to Snowflake. DX is enterprise retention, not just a nice-to-have."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·05</span>
+          <div class="q-content">
+            <div class="q-text">How do you think about defining a product north star when the product is foundational infrastructure that other teams build on?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Platform Metrics</span><span class="q-tag tag-b">Strategy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"This is the core hard problem of platform product management: your product doesn't directly generate user value — it enables others to generate user value. So your north star has to be a leading indicator of downstream success, not just platform usage."</p>
+            <div class="code-block">
+              <span class="label">North Star Framework for Platform/Infrastructure Products</span>
+              <strong>Wrong north stars:</strong> API call volume, number of active developers, feature adoption rate — these measure activity, not value.<br><br>
+              <strong>Better north stars:</strong> "Outcomes enabled" — how many production AI/ML pipelines are running successfully on VantageCloud per month? "Time to production" — how many days from first model training to a model scoring live transactions in a customer environment? These measure whether the platform is actually enabling real value downstream.<br><br>
+              <strong>For Teradata's Agentic Platform specifically:</strong> I'd propose something like "autonomous decisions made by AI agents on Teradata data that were reviewed and validated correct by a human" — because this captures both adoption AND trustworthiness, the two things Raj's platform needs to prove simultaneously.
+            </div>
+            <p>"The key principle: your north star should make it obvious when you've succeeded and obvious when you've failed. For a platform, that usually means measuring the success rate of the things built on top of you, not just the health of the platform itself."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·06</span>
+          <div class="q-content">
+            <div class="q-text">Teradata is 45 years old. How do you think about innovating within a legacy enterprise technology company versus a startup?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Context</span><span class="q-tag tag-b">Innovation</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Honest About the Tradeoffs</div>
+          <div class="answer-text">
+            <p>"A 45-year-old enterprise company is both a constraint and an asset — and the mistake is treating it as one or the other exclusively."</p>
+            <p><strong>The constraint:</strong> Existing customer commitments slow down radical redesign. Every architectural decision carries a compatibility burden. The sales motion is built around established value propositions — shifting that narrative takes time and internal persuasion, not just good product decisions.</p>
+            <p><strong>The asset:</strong> Teradata has something most AI startups would pay any amount to acquire: trust. Fortune 500 banks, telcos, and retailers trust Teradata with their most sensitive data. That trust is a moat that takes decades to build. Any AI platform Teradata releases starts with enterprise credibility that Databricks or a new agentic AI startup has to earn slowly."</p>
+            <div class="code-block">
+              <span class="label">How I'd Think About Innovation at Teradata</span>
+              1. Identify capabilities that are innovations for Teradata but table stakes for the market — close those gaps first, they're blocking deals.<br><br>
+              2. Identify capabilities where Teradata's trust and scale position it to do things no startup can — invest disproportionately there (ModelOps at millions of models, agentic AI with enterprise governance). That's where Teradata can lead.<br><br>
+              3. Accept that some innovations are better acquired or partnered than built — and lobby internally for the speed and decisiveness to do so.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·07</span>
+          <div class="q-content">
+            <div class="q-text">How would you think about pricing strategy for an agentic AI capability added to VantageCloud?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Business Model</span><span class="q-tag tag-b">Strategic</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Raj Comes from a Business Strategy Background</div>
+          <div class="answer-text">
+            <p>"Pricing for agentic AI is unsolved territory — most enterprise vendors are figuring it out in real time. My framework would start with value alignment: price in a way that correlates with the value the customer extracts."</p>
+            <div class="code-block">
+              <span class="label">Pricing Options & Tradeoffs</span>
+              <strong>Per-agent model:</strong> Price per active AI agent deployed. Predictable for the customer, easy to understand. Risk: disincentivises adoption at scale — customers will restrict how many agents they deploy.<br><br>
+              <strong>Outcome-based / consumption model:</strong> Price per autonomous decision made, per query resolved, per model deployed to production. Aligns perfectly with value. Risk: hard to predict costs for customers — CFOs hate surprises.<br><br>
+              <strong>Tiered capability model (most likely right answer for enterprise):</strong> Core VantageCloud subscription includes baseline agentic capabilities. Premium tiers unlock governance audit trails, enterprise-grade agent orchestration, more models in production, priority compute for agent workloads. This matches how enterprise software is actually bought and preserves predictability.<br><br>
+              <strong>My recommendation:</strong> A consumption-based model with a spend cap — customers pay for what agents do, but with a ceiling they can plan against. This captures value alignment without the CFO risk.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num purple">S·08</span>
+          <div class="q-content">
+            <div class="q-text">What would you say is the single biggest risk to Teradata's position in the market over the next 5 years?</div>
+            <div class="q-tags"><span class="q-tag tag-s">Market Analysis</span><span class="q-tag tag-p">Bold POV</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Specific and Intellectually Honest</div>
+          <div class="answer-text">
+            <p>"The biggest risk isn't Snowflake or Databricks — they've been the "Teradata killer" for a decade and Teradata is still standing. The real risk is narrative displacement."</p>
+            <p>"Enterprise buyers are now asking their CDOs 'what's your AI strategy?' — not 'what's your data warehouse strategy?' If Teradata is still primarily perceived as an enterprise data warehouse company when that question is being asked, it loses the conversation before the demo. The product can be world-class, but if the category definition excludes you, the deals go to OpenAI enterprise, Google Cloud, or Databricks by default."</p>
+            <div class="code-block">
+              <span class="label">The Risk in One Sentence</span>
+              Teradata could build the right product (Agentic AI Platform, ClearScape) and still lose market share because it failed to redefine its category fast enough from "data warehouse" to "enterprise AI operating system."
+            </div>
+            <p>"The mitigation — and what Raj's team is doing — is to lead with the agentic narrative aggressively, get reference customers in AI-native use cases, and make sure the technical community (data scientists, AI engineers) is advocating for Teradata in architecture decisions."</p>
+            <div class="callout info">
+              <div class="icon">💡</div>
+              <div class="body"><strong>Note:</strong> Frame this as an opportunity Teradata is addressing, not a fatal flaw. Raj is building the solution to this problem — acknowledge that directly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ AGENTIC AI ═══ -->
+    <div class="section" id="agentic">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Agentic AI Deep Dive</h2>
+      </div>
+      <p class="section-desc">This is Raj's current product. He will expect you to engage with it seriously. These questions will reveal whether you've actually thought about agentic AI or just read the headlines.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·01</span>
+          <div class="q-content">
+            <div class="q-text">What is an AI agent and how is it different from a traditional LLM or chatbot?</div>
+            <div class="q-tags"><span class="q-tag tag-t">Agentic AI</span><span class="q-tag tag-b">Fundamentals</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Foundation Question, Don't Fumble This</div>
+          <div class="answer-text">
+            <p>"A traditional LLM or chatbot is <strong>reactive</strong>: you give it a prompt, it returns a response. One turn, no memory, no action in the world."</p>
+            <p>"An AI agent is <strong>autonomous and action-oriented</strong>: it receives a goal, breaks it into sub-tasks, executes those tasks using available tools (query databases, call APIs, run code, send messages), evaluates its own progress, and iterates until the goal is achieved — often without human intervention at each step."</p>
+            <div class="code-block">
+              <span class="label">Key Differences</span>
+              <strong>Chatbot:</strong> "What was Q3 revenue?" → Returns an answer.<br>
+              <strong>AI Agent:</strong> "Identify the top 3 factors behind Q3 revenue underperformance and draft a corrective action plan for the CFO." → The agent queries VantageCloud for revenue data, runs a statistical analysis, cross-references it with market data, identifies root causes, generates a formatted report, and emails it. No human involvement at each step.<br><br>
+              <strong>Key agent capabilities not present in chatbots:</strong><br>
+              • Tool use (database queries, API calls, code execution)<br>
+              • Memory (short-term context + long-term storage)<br>
+              • Planning (breaking goals into sub-tasks)<br>
+              • Self-evaluation (checking its own outputs for errors)<br>
+              • Multi-step autonomous action
+            </div>
+            <p>"Teradata's Agentic Platform enables agents to do this on enterprise data — with the governance, access controls, and audit trails that make it safe to actually deploy in a bank or telco."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·02</span>
+          <div class="q-content">
+            <div class="q-text">What are the unique product challenges of building a trustworthy agentic AI platform for enterprise?</div>
+            <div class="q-tags"><span class="q-tag tag-t">Agentic AI</span><span class="q-tag tag-s">Product Depth</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — This Is Core to Raj's Day Job</div>
+          <div class="answer-text">
+            <div class="code-block">
+              <span class="label">The Hard Product Problems</span>
+              <strong>1. Hallucination in high-stakes contexts:</strong> An LLM generating a slightly wrong creative piece is forgettable. An agent misreading inventory data and placing a $10M purchase order is not. Grounding agents in structured, verified enterprise data (Teradata's core) is the foundation — but you also need agents to express uncertainty and fail gracefully, not confidently wrong.<br><br>
+              <strong>2. Explainability and audit:</strong> When an agent recommends discontinuing a product line, the CFO will ask "why?" Enterprise buyers need a full reasoning trace — not just the output, but every decision, query, and inference the agent made. This is a first-class product requirement, not a nice-to-have.<br><br>
+              <strong>3. Access control at agent speed:</strong> Traditional row-level security was designed for human query latency (seconds). An agent might fire 50 queries in milliseconds while solving a problem. The governance layer has to apply the same data access rules without creating a performance bottleneck that makes agents unusable.<br><br>
+              <strong>4. Scope containment:</strong> Agents that can do anything are terrifying. Enterprise buyers need to define and enforce agent scope — "this agent can only read data, never write; only access finance data, not HR." Building the right scope definition primitives is a non-trivial product design problem.<br><br>
+              <strong>5. Human-in-the-loop design:</strong> When should an agent pause and ask a human? Too often → annoying. Never → dangerous. The right interruption model is a product decision with enormous consequences.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·03</span>
+          <div class="q-content">
+            <div class="q-text">How does grounding an AI agent in structured enterprise data (like Vantage) differ from an agent that just uses a general web knowledge base?</div>
+            <div class="q-tags"><span class="q-tag tag-t">Agentic AI</span><span class="q-tag tag-b">Technical Depth</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"An agent that reasons from general web knowledge is answering 'what does the internet think about this topic?' An enterprise-grounded agent is answering 'what is actually true in this company's data right now?' — and that distinction is the entire value proposition."</p>
+            <div class="code-block">
+              <span class="label">Why Enterprise Data Grounding Matters</span>
+              <strong>Specificity:</strong> General knowledge can tell you average fraud rates in e-commerce. Your Vantage data tells you YOUR fraud rate, by transaction type, by customer segment, at this moment. Agents grounded in your actual data make decisions about your actual business.<br><br>
+              <strong>Real-time:</strong> Web knowledge has a training cutoff. Enterprise databases are live. An agent querying VantageCloud directly gets Q4 results as they're being reported, not Q3 results from a cached model.<br><br>
+              <strong>Provenance:</strong> You can trace every piece of information an enterprise agent used back to a specific table, row, and timestamp. That auditability is impossible with an ungrounded LLM. For regulatory compliance, this is non-negotiable.<br><br>
+              <strong>Access-controlled truth:</strong> Enterprise data has permission layers. Grounded agents respect those layers by construction — a sales agent only sees data the sales team is authorised to see.
+            </div>
+            <p>"The technical implementation: Teradata's agents likely use RAG (Retrieval-Augmented Generation) over structured SQL queries rather than over document embeddings — which is actually harder to get right, because SQL queries require the agent to understand table schemas, join relationships, and business logic. Getting this right is what Raj's team is working on."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·04</span>
+          <div class="q-content">
+            <div class="q-text">What would a good vs. bad product spec look like for an "agentic analytics workflow" feature?</div>
+            <div class="q-tags"><span class="q-tag tag-t">Agentic AI</span><span class="q-tag tag-b">PM Execution</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Show PM Craft at Raj's Level</div>
+          <div class="answer-text">
+            <div class="code-block">
+              <span class="label">Bad Spec</span>
+              "Users should be able to ask the AI to analyze their data and get insights automatically."<br><br>
+              Why bad: No defined agent scope. No failure modes. No governance model. No defined user role. No success criteria. Impossible to build from this.
+            </div>
+            <div class="code-block">
+              <span class="label purple">Good Spec (Structure)</span>
+              <strong>Problem statement:</strong> A data analyst at a bank needs to produce a weekly churn risk report. Today this takes 4 hours of manual SQL + Excel work. The goal is for an AI agent to produce an equivalent report in under 5 minutes with analyst review, not replacement.<br><br>
+              <strong>User persona:</strong> Data analyst, intermediate SQL proficiency, not an ML expert. Has read access to customer transaction and CRM tables in VantageCloud.<br><br>
+              <strong>Agent scope:</strong> Can query any table the analyst has read permission on. Cannot modify data. Cannot send external communications without analyst approval. Can run ClearScape Analytics ML functions.<br><br>
+              <strong>Human-in-the-loop:</strong> Agent presents a plan ("I'll query these 3 tables and apply this churn model") before executing. Analyst approves or modifies. Final report is reviewed before distribution.<br><br>
+              <strong>Failure handling:</strong> If the agent encounters a query error, it presents the error in plain language with a proposed fix, not a stack trace. If it reaches a data access boundary, it tells the analyst what it can't access and why.<br><br>
+              <strong>Success criteria:</strong> 80% of analysts complete their weekly report in under 10 minutes. Analyst accuracy vs. manual report: >95% match. Zero unauthorised data accesses in first 90 days.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·05</span>
+          <div class="q-content">
+            <div class="q-text">What's the difference between RAG, fine-tuning, and in-context learning for enterprise AI? When would you use each?</div>
+            <div class="q-tags"><span class="q-tag tag-t">AI/ML Technical</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Technically Credible</div>
+          <div class="answer-text">
+            <div class="code-block">
+              <span class="label">Three Techniques Compared</span>
+              <strong>RAG (Retrieval-Augmented Generation):</strong> The model retrieves relevant documents/data at inference time and uses them as context before generating a response. The model itself doesn't change.<br>
+              → Use when: You need the model to answer questions based on proprietary, frequently updated data. Enterprise search, document Q&A, database-grounded agents. Teradata's agentic platform almost certainly uses this for structured data retrieval.<br><br>
+              <strong>Fine-tuning:</strong> You update the model's weights on your specific dataset, so the model permanently learns domain-specific knowledge and style.<br>
+              → Use when: You need the model to consistently behave in a domain-specific way (e.g., always produce SQL in Teradata dialect, always format outputs for financial reports). Expensive and slower to update — don't use for dynamic knowledge, only for static behaviour patterns.<br><br>
+              <strong>In-context learning (prompt engineering):</strong> You give the model examples and instructions in the prompt itself, without changing any weights.<br>
+              → Use when: You need fast iteration, don't have enough data to fine-tune, and the task is well-specified enough to demonstrate with examples. Best for prototyping and for tasks where the pattern is straightforward.
+            </div>
+            <p>"For Teradata's agentic use case: RAG + in-context learning for data retrieval and query generation. Fine-tuning for domain-specific behaviors like Teradata SQL dialect adherence or industry-specific output formatting."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·06</span>
+          <div class="q-content">
+            <div class="q-text">How would you measure success for an agentic AI product in its first 6 months post-launch?</div>
+            <div class="q-tags"><span class="q-tag tag-t">Agentic AI</span><span class="q-tag tag-b">Metrics</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"Most teams will be tempted to measure usage — 'agents created', 'workflows run'. That's measuring activity, not value. I'd structure metrics across three levels:"</p>
+            <div class="code-block">
+              <span class="label">6-Month Success Metrics</span>
+              <strong>Adoption:</strong> # of enterprise customers with at least one agent running in production (not just sandbox). First 6 months, I'd target meaningful penetration of existing VantageCloud customers — they're the lowest friction path to adoption.<br><br>
+              <strong>Agent quality:</strong> Task completion rate (% of agent runs that reach their goal without human intervention or error). Target: >70% after first 90 days, >85% by month 6. Also: time-to-goal comparison vs. manual workflow equivalent.<br><br>
+              <strong>Trust signals:</strong> What % of agent outputs were reviewed vs. immediately acted upon? A high review rate is okay early — it shows adoption. A declining review rate over time shows trust is building. A review rate that stays at 100% indefinitely means agents aren't seen as reliable.<br><br>
+              <strong>Safety record:</strong> Zero unauthorised data accesses. Zero incorrect outputs that made it to a business decision without human review. One of these in month 1 can undo 6 months of adoption work in enterprise.<br><br>
+              <strong>Expansion signal:</strong> # of customers who started with one agent use case and launched a second. This is the strongest early indicator of product-market fit in enterprise.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num green">A·07</span>
+          <div class="q-content">
+            <div class="q-text">What's your view on the "AI replaces analysts" narrative — and how does that affect how Teradata should position its agentic platform?</div>
+            <div class="q-tags"><span class="q-tag tag-t">Agentic AI</span><span class="q-tag tag-s">Positioning</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Raj Has Thought Deeply About This</div>
+          <div class="answer-text">
+            <p>"The 'AI replaces analysts' narrative is both misleading and actively harmful to enterprise adoption — and Teradata should position against it deliberately."</p>
+            <p>"The reality: AI agents don't replace analysts, they change what analysts do. The analyst who spent 4 hours pulling and cleaning data now reviews, validates, and acts on the agent's output in 20 minutes. That's not job replacement — that's massive capability amplification. The analyst who used to run 5 analyses per week can now run 25. Their judgment, domain knowledge, and accountability remain irreplaceable."</p>
+            <div class="code-block">
+              <span class="label">Positioning Recommendation</span>
+              Lead with "AI amplification, not replacement." Examples:<br><br>
+              • "Your analysts make 5x more decisions with the same headcount"<br>
+              • "Your data scientists finally spend their time on insights, not data wrangling"<br>
+              • "AI agents handle the repeatable work; your team handles the judgment calls"<br><br>
+              This positioning: (a) is accurate, (b) reduces internal political resistance to adoption, (c) speaks to C-suite ROI without triggering HR anxiety, (d) differentiates from dystopian AI narratives that make enterprise buyers nervous.
+            </div>
+            <p>"The deeper truth: enterprise buyers who fear AI replacement will slow-walk adoption with governance reviews and stakeholder objections. Buyers who see AI as amplification move fast. The narrative you adopt is a product decision that affects your go-to-market velocity."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ LEADERSHIP ═══ -->
+    <div class="section" id="leadership">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Leadership & Judgment Questions</h2>
+      </div>
+      <p class="section-desc">A Sr. Director evaluates whether you show leadership instincts and sound judgment — not just execution. These questions test how you handle ambiguity, disagreement, and ethical complexity.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·01</span>
+          <div class="q-content">
+            <div class="q-text">Tell me about a time you had to push back against what a senior stakeholder wanted. How did you handle it?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Leadership</span><span class="q-tag tag-b">Behavioral</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer (STAR) — Go Deeper Than With Jefferson</div>
+          <div class="answer-text">
+            <p><strong>Situation:</strong> At Aasaan App, a senior leader wanted to add three new features to our B2B pitch deck based on a single large prospect's requests. The view was "if they want it, we build it."</p>
+            <p><strong>Task:</strong> I believed we were at risk of building a custom solution for one account instead of a scalable product for our core market.</p>
+            <p><strong>Action:</strong> Rather than just saying no, I reframed the question. I ran a quick analysis of our last 50 deals — what objections were raised, what features were requested, what actually drove conversion. The three requested features appeared in fewer than 8% of deal conversations. I presented this alongside a counter-proposal: instead of building the features, let's document them as a premium roadmap item, address this prospect's immediate needs through configuration, and run 5 more discovery calls with similar-size prospects to validate if this is a pattern before committing engineering cycles.</p>
+            <p><strong>Result:</strong> The senior leader agreed to the discovery approach. The 5 calls revealed that 3 of the 3 features were indeed niche — we ultimately chose not to build 2 of them. One made it into the roadmap 6 months later when validated by a pattern across 10+ accounts.</p>
+            <div class="callout info">
+              <div class="icon">💡</div>
+              <div class="body"><strong>What Raj sees in this answer:</strong> You used data to reframe the question rather than just resisting. You proposed a path forward. You were right for defensible reasons, not opinion. That's senior PM behavior.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·02</span>
+          <div class="q-content">
+            <div class="q-text">How do you make decisions when you have incomplete data?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Judgment</span><span class="q-tag tag-b">Decision-Making</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"The worst response to incomplete data is paralysis — waiting for more data than you'll ever have before making a call. The second worst is pretending the uncertainty doesn't exist and making a confident call anyway."</p>
+            <div class="code-block">
+              <span class="label">My Decision Framework Under Uncertainty</span>
+              <strong>1. Identify what kind of decision it is:</strong> Reversible or irreversible? Reversible decisions (feature experiments, positioning tests, backlog ordering) should be made quickly with whatever data you have. Irreversible decisions (major architecture choices, pricing tiers, product discontinuation) warrant more caution and more data collection.<br><br>
+              <strong>2. Distinguish signal from noise:</strong> Do I have weak data on everything, or strong data on some things? Sometimes 20% of the data gives you 80% of the signal you need for the decision at hand.<br><br>
+              <strong>3. Make the assumption explicit:</strong> "I'm making this decision assuming X. If X turns out to be wrong, we'll know within 30 days because of Y metric, and we'll reverse course by doing Z." This makes the uncertainty a managed risk, not a hidden one.<br><br>
+              <strong>4. Set a review trigger:</strong> Every decision under uncertainty should have a predetermined checkpoint — when will we look at this again, and what evidence would cause us to change course?
+            </div>
+            <p>"At Enigma, almost every decision I made was under conditions of incomplete data — we were a startup. I got comfortable being explicit about assumptions and building in review loops as a standard practice."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·03</span>
+          <div class="q-content">
+            <div class="q-text">How do you think about the ethical dimensions of deploying AI that automates decisions for people?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Ethics</span><span class="q-tag tag-b">AI Responsibility</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Raj's Meta Background Makes This Deeply Personal</div>
+          <div class="answer-text">
+            <p>"I think about AI ethics not as a compliance checklist but as a product quality dimension. An AI system that makes unfair decisions, harms users, or produces unauditable outputs is simply a bad product — regardless of its accuracy metrics."</p>
+            <div class="code-block">
+              <span class="label">Principles I Hold</span>
+              <strong>1. Transparency by default:</strong> Users who are affected by an AI decision should be able to understand why that decision was made. "Black box" is acceptable for a recommendation algorithm. It's not acceptable for a credit decision, a hiring decision, or a fraud flag that freezes someone's account.<br><br>
+              <strong>2. Proportionality:</strong> The level of human oversight required should be proportional to the stakes. AI-suggested playlist? Low stakes, full automation fine. AI-recommended procurement cut that affects 200 employees? Human review is non-negotiable.<br><br>
+              <strong>3. Bias auditing as a continuous process:</strong> Models trained on historical data inherit historical biases. At Aasaan, my lead-scoring model had a potential bias risk toward leads from larger companies (more training data) vs. smaller companies. I ran a segment-level accuracy analysis before deployment to surface and address this. It's not a one-time exercise.<br><br>
+              <strong>4. Accountability ownership:</strong> Someone in the organisation must own accountability for every AI decision at scale. "The model decided" is never an acceptable answer. The PM, not the model, is accountable.
+            </div>
+            <p>"At Teradata, where agents may be influencing decisions at Fortune 500 scale, these principles aren't abstract — they're product requirements."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·04</span>
+          <div class="q-content">
+            <div class="q-text">How do you manage working across very different stakeholders — engineers, data scientists, business executives — who have different languages and priorities?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Cross-Functional</span><span class="q-tag tag-b">Leadership</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"I think about this as translation work — not in the condescending sense of 'simplifying for non-technical people', but in the genuine sense of finding the shared language where everyone's actual concerns overlap."</p>
+            <div class="code-block">
+              <span class="label">Stakeholder Translation Map</span>
+              <strong>With engineers:</strong> I speak in requirements and constraints. What can we build, what are the tradeoffs, what are we optimising for? I never ask engineers to just build something — I give them the problem and the success criteria and let them challenge the approach. They know things about the system I don't.<br><br>
+              <strong>With data scientists:</strong> I'm a participant in their problem framing, not just the translator. I can discuss model tradeoffs (precision vs recall, interpretability vs accuracy) at enough depth to be useful. My ML background at Aasaan gave me credibility in these conversations that a pure business PM doesn't have.<br><br>
+              <strong>With business executives:</strong> Business outcomes and risk. Not features, not model accuracy — what decision will this help them make faster, and what's the downside if it's wrong? I connect every technical capability to a P&L line.
+            </div>
+            <p>"The test I use: can I explain this decision in a way that makes each stakeholder feel their concerns were understood, even if they didn't fully get what they asked for? If yes, the cross-functional relationship stays strong through disagreement."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·05</span>
+          <div class="q-content">
+            <div class="q-text">How do you know when a product is ready to ship versus when it needs more work?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Judgment</span><span class="q-tag tag-b">Ship Quality</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <p>"The honest answer is that 'ready to ship' is never a perfect state — it's a risk-adjusted judgment call. The question is whether the remaining imperfection poses acceptable risk to users and the business."</p>
+            <div class="code-block">
+              <span class="label">My Ship/Hold Framework</span>
+              <strong>Ship when:</strong><br>
+              • Core use case works reliably (>95% success rate in testing)<br>
+              • Known issues are documented, scoped, and have workarounds where critical<br>
+              • Failure modes are visible (we'll know when something breaks) rather than silent<br>
+              • The cost of not shipping (delayed learning, competitor moves, customer commitments) exceeds the cost of shipping with current known issues<br><br>
+              <strong>Hold when:</strong><br>
+              • A known issue could cause data loss, security breach, or significant financial harm to users<br>
+              • The core job-to-be-done doesn't work reliably — shipping would damage trust more than it builds it<br>
+              • We haven't run the product through the user persona that will actually use it (paper testing doesn't count)<br><br>
+              <strong>For agentic AI specifically:</strong> The bar is higher because failures are less recoverable. An agent that makes a wrong recommendation in a demo is embarrassing. An agent that autonomously takes a wrong action on enterprise data is a customer story that kills the product category. I'd hold on safety-critical paths longer than I would for a traditional software feature.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·06</span>
+          <div class="q-content">
+            <div class="q-text">How do you approach learning in a new domain quickly — what would your first 30 days at Teradata look like?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Learning</span><span class="q-tag tag-b">Onboarding</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer</div>
+          <div class="answer-text">
+            <div class="code-block">
+              <span class="label">My 30-Day Plan at Teradata</span>
+              <strong>Week 1 — Listen aggressively:</strong><br>
+              Request 30-minute 1:1s with everyone on the PM team and one engineer from each major team. My agenda: what's the most important thing you think I need to understand, and what's the thing that surprised you most when you joined? Listen, don't present.<br><br>
+              <strong>Week 2 — Use the product as a user:</strong><br>
+              Go through ClearScape Analytics Experience end-to-end. Run the Jupyter notebook demos. Try to build a small model on actual data. Break things. Find the friction. Nothing builds product intuition faster than experiencing it as a user.<br><br>
+              <strong>Week 3 — Shadow customer conversations:</strong><br>
+              Ask to sit in on at least 2 customer calls (even as a silent observer). Enterprise customer context — the language they use, the problems they mention, the frustrations they surface — is irreplaceable.<br><br>
+              <strong>Week 4 — Produce something:</strong><br>
+              Draft a one-pager on something I've observed — a gap, an opportunity, a question worth asking. Share it with Jefferson and Raj and invite critique. The goal isn't to be right — it's to demonstrate I can take inputs and produce structured thinking quickly.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num amber">L·07</span>
+          <div class="q-content">
+            <div class="q-text">What do you think makes the difference between a good APM and a great one?</div>
+            <div class="q-tags"><span class="q-tag tag-r">Self-Awareness</span><span class="q-tag tag-b">Growth</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Show You've Thought About This Seriously</div>
+          <div class="answer-text">
+            <p>"A good APM executes what they're given and doesn't drop balls. A great APM changes the framing of what they're working on."</p>
+            <p>"Specifically: great APMs don't just answer 'how do I build this?' They consistently ask 'are we building the right thing?' — and they earn enough trust quickly enough that when they raise that question, people take it seriously rather than dismissing it as junior input."</p>
+            <div class="code-block">
+              <span class="label">The Three Differentiators I've Observed</span>
+              1. <strong>User obsession over task completion:</strong> A good APM writes good user stories. A great APM writes user stories that come from direct user contact, not assumptions — and can tell you what users actually do vs. what they say they do.<br><br>
+              2. <strong>Commercial awareness:</strong> Great APMs know how their features connect to revenue, retention, or cost. They can walk into a business review and speak to business outcomes, not just feature launches.<br><br>
+              3. <strong>Judgment under pressure:</strong> When the release deadline is tomorrow and the feature is 70% done, a great APM knows whether to ship, hold, or scope down — and makes that call with conviction and the right stakeholders, not by defaulting to whoever has the loudest voice.
+            </div>
+            <p>"I'd rather be caught asking the right question than answering the wrong one efficiently."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ RESUME THROUGH RAJ'S LENS ═══ -->
+    <div class="section" id="resume">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Your Resume — Through Raj's Lens</h2>
+      </div>
+      <p class="section-desc">Raj will read your background differently than Jefferson did. He's evaluating potential and trajectory, not just execution. Expect more "why did you do it that way" questions than "tell me about" questions.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·01</span>
+          <div class="q-content">
+            <div class="q-text">I see you've used ML models in your previous roles. What's the biggest limitation you've encountered in deploying ML in a real product, and how did you address it?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Resume Probe</span><span class="q-tag tag-t">ML Depth</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Go Beyond the Surface</div>
+          <div class="answer-text">
+            <p>"The biggest limitation I ran into was the gap between model performance on test data and adoption in the product context — what I'd call the 'last mile' problem of ML deployment."</p>
+            <p>At Aasaan, my lead-scoring model was technically strong — 46% efficiency lift in controlled testing. But it sat unused for two weeks after deployment because I'd optimised for model accuracy and completely ignored the user experience layer. Sales reps saw a score on their dashboard with no context — no explanation of what drove the score, no guidance on what to do with it."</p>
+            <div class="code-block">
+              <span class="label">What I Changed</span>
+              1. Added plain-language explanations next to each score: "Score: 82 — High intent signals: viewed pricing page 3x, demo requested, company size matches high-LTV segment."<br><br>
+              2. Built a feedback mechanism: reps could mark scores as "wrong" after a call, which fed back into model retraining.<br><br>
+              3. Ran a working session with the sales team to show the model's logic on familiar accounts — building trust through transparency, not just accuracy.
+            </div>
+            <p>"The lesson: ML model performance and ML product performance are different metrics. Optimising for accuracy without optimising for adoption is shipping a model that doesn't actually exist in the product."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·02</span>
+          <div class="q-content">
+            <div class="q-text">You've worked in B2C EdTech, B2B e-commerce SaaS, and B2B enterprise SaaS. How does your understanding of user psychology differ across these contexts?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Resume Probe</span><span class="q-tag tag-s">User Empathy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Synthesise Your Experience</div>
+          <div class="answer-text">
+            <div class="code-block">
+              <span class="label">User Psychology Across My Three Contexts</span>
+              <strong>B2C EdTech (MyCaptain):</strong> Emotion-driven decisions. The student buying a course is investing in a version of themselves they aspire to be. Purchase decisions are made in emotional peaks; buyer's remorse peaks 24-48 hours later. The product has to deliver a sense of progress quickly or churn follows. Motivation is intrinsic but fragile.<br><br>
+              <strong>B2B e-commerce SaaS (Aasaan):</strong> ROI-driven decisions, but with a human element. The buyer is often the founder or a small team — they feel the product personally. They'll forgive UX friction if the core value prop works. Churn often happens not because the product is bad, but because the user never got to the "aha moment" — onboarding is the most critical PM problem.<br><br>
+              <strong>B2B Enterprise SaaS (Enigma, now Teradata):</strong> Multi-stakeholder, risk-averse, relationship-driven. The "user" and the "buyer" are rarely the same person. A data scientist loves the product; the CISO worries about governance; the CFO questions the contract terms. You're selling to a committee and serving individuals. Switching costs are high — which means wins compound, but so do losses.
+            </div>
+            <p>"At Teradata, this enterprise psychology matters enormously for the Agentic Platform. The data scientist will evangelize it internally if the DX is great. But the CISO and legal team will kill the deployment if governance isn't airtight. Serving both simultaneously is the product design challenge."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·03</span>
+          <div class="q-content">
+            <div class="q-text">What's the most commercially important product decision you've made, and what was its business impact?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Resume Probe</span><span class="q-tag tag-r">Commercial Awareness</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Go for the Highest-Stakes Story</div>
+          <div class="answer-text">
+            <p>"The most commercially consequential decision I made was at MyCaptain — choosing to narrow the targeting strategy rather than expand it."</p>
+            <p>When I joined, the team was selling to anyone who expressed interest — broad demographic targeting, high outreach volume, low conversion. I analysed the small set of students who had completed courses and had the best outcomes. They shared a tight profile: mid-20s, career changers from specific industries, within a decision window after a triggering event (job loss, promotion ceiling, new year)."</p>
+            <p>I recommended narrowing our entire acquisition and sales strategy to this segment and accepting lower volume in exchange for higher win rate. It was a contrarian recommendation — saying no to apparent demand is uncomfortable."</p>
+            <p><strong>Result:</strong> Conversion rate went from 3% to 7% in 60 days. Revenue grew from ₹2L to ₹10L over 4 months. The team validated product-market fit in a segment they could actually serve well, rather than diluting across segments they served poorly."</p>
+            <div class="callout success">
+              <div class="icon">✓</div>
+              <div class="body"><strong>Why this lands with Raj:</strong> It's a strategic decision with a clear business outcome. You made a non-obvious call, you were right, and you can quantify it. That's the level of commercial thinking Raj is looking for.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·04</span>
+          <div class="q-content">
+            <div class="q-text">If you'd had more resources or time at Enigma, what's the one thing you would have done differently?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Resume Probe</span><span class="q-tag tag-r">Reflection</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Genuinely Reflective</div>
+          <div class="answer-text">
+            <p>"I'd have invested earlier in a proper product analytics infrastructure. We relied heavily on qualitative signals — user interviews, sales call notes, support tickets — because we didn't have the event tracking instrumentation to quantify user behaviour in the product itself."</p>
+            <p>"Every prioritisation decision I made at Enigma was directionally right but would have been far more defensible — and far more accurate — with product usage data behind it. I knew what users said in interviews; I didn't know what they actually did in the product minute-to-minute."</p>
+            <p>"What I'd do differently: in the first month, before working on any feature, I'd instrument the core user journeys with events — every click, every action, every drop-off. The time investment would have paid back tenfold in the quality of every subsequent decision."</p>
+            <p>"This is actually one of the things I'm most excited about at Teradata — the data infrastructure exists to make those analytics decisions precisely, not approximately."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·05</span>
+          <div class="q-content">
+            <div class="q-text">Your Pega CDH certification — how deeply do you understand decisioning systems, and how does that apply to an agentic AI context?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Resume Probe</span><span class="q-tag tag-t">Technical Depth</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Connect Pega to Agentic AI</div>
+          <div class="answer-text">
+            <p>"Pega CDH is essentially a real-time decisioning engine — it takes customer signals, applies adaptive ML models, and produces next-best-action recommendations at millisecond speed. At Enigma, I used it to build our churn prediction model that scored at-risk accounts before revenue impact appeared."</p>
+            <div class="code-block">
+              <span class="label">CDH → Agentic AI Connection</span>
+              Pega CDH taught me the principles that directly apply to agentic AI:<br><br>
+              <strong>1. Decision explainability:</strong> CDH decisions come with propensity scores and contributing factor breakdowns. The output isn't just "this customer will churn" — it's "this customer will churn (score: 0.82) because: declining login frequency (-0.3), support tickets this month (+0.2), payment delay (+0.15)." That transparency model is exactly what I'd want for every agentic AI decision at Teradata.<br><br>
+              <strong>2. Adaptive learning in production:</strong> CDH models update in real-time as new behavior comes in — they don't wait for a monthly retrain. Agentic AI systems need similar online learning capabilities.<br><br>
+              <strong>3. Action orchestration:</strong> CDH doesn't just score — it triggers actions: email, CSM alert, product nudge. That action orchestration model is one of the templates for building effective agentic workflows.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·06</span>
+          <div class="q-content">
+            <div class="q-text">What have you built outside of your formal job roles that tells me something about who you are as a product person?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Resume Probe</span><span class="q-tag tag-r">Identity</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Use FlowState + Your Personal Tech Stack</div>
+          <div class="answer-text">
+            <p>"I've been building a native Android app called FlowState — it's a personal life management system I'm developing because I couldn't find an existing app that solved the specific problem I had: building sustainable habits across multiple life dimensions simultaneously without cognitive overload."</p>
+            <p>"What makes it interesting from a PM perspective: I wrote a full PRD before writing a line of code. The PRD is grounded in neuroscience research on habit formation, and it covers six distinct modules — punctuality, wellness, social media management, smoking harm reduction, impulsive spending, and task management. Each module has its own user psychology model and success metric."</p>
+            <p>"I'm also running a personal infrastructure stack — local AI models through Ollama, n8n for automation, Portainer for container management. I do this because I believe PMs who use the technologies they're building products around have fundamentally better product instincts than PMs who only read about them."</p>
+            <div class="callout info">
+              <div class="icon">💡</div>
+              <div class="body"><strong>Why this lands:</strong> It demonstrates that product thinking is intrinsic to who you are, not just what your job title says. Raj follows thought leaders in PM (Peter Yang) — he values people who take the craft seriously outside working hours.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·07</span>
+          <div class="q-content">
+            <div class="q-text">At Meta, I worked on infrastructure for billions of users. How does thinking at that scale transfer to what you're doing, and are you prepared for that shift?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Experience Gap</span><span class="q-tag tag-r">Honest Calibration</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Don't Overclaim, Show Awareness</div>
+          <div class="answer-text">
+            <p>"The honest answer is: no, I haven't worked at that scale, and I won't pretend the gap doesn't exist. I haven't designed for billions of queries per day. I haven't dealt with the governance complexity of a Meta-scale privacy-aware data platform."</p>
+            <p>"What I can offer is this: the foundational PM skills — understanding users deeply, translating between technical and business stakeholders, making defensible prioritisation decisions, measuring what matters — don't fundamentally change at scale. The vectors of difficulty change. The complexity of stakeholder management, the consequence of architectural decisions, the rigour of testing — all amplify."</p>
+            <p>"What I'd bring to that environment isn't a pretence of experience I don't have. It's a set of working instincts I've battle-tested in fast-moving, resource-constrained contexts — and genuine hunger to learn the scale-specific craft from people who've operated at Meta and HP level. That's a trade I'd make enthusiastically."</p>
+            <div class="callout warn">
+              <div class="icon">⚠️</div>
+              <div class="body"><strong>Don't pivot to bravado here.</strong> Raj has actually worked at Meta's scale. He'll immediately detect any overclaim. Intellectual honesty + specific curiosity + demonstrated learning agility is the only play that works with him.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">R·08</span>
+          <div class="q-content">
+            <div class="q-text">If this role's primary success metric for you in year one was "made your senior PMs 20% more effective" — what would you actually do?</div>
+            <div class="q-tags"><span class="q-tag tag-b">Role Clarity</span><span class="q-tag tag-r">Value Proposition</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — This Is the APM Value Proposition</div>
+          <div class="answer-text">
+            <div class="code-block">
+              <span class="label">How I'd Make Senior PMs 20% More Effective</span>
+              <strong>1. Own the competitive research burden completely:</strong> Senior PMs have the context to make strategic calls but often can't spare 4 hours for a deep-dive on Snowflake's latest AI release. I'd own this function — weekly competitive intelligence briefs, synthesised to decision-relevant insights, not raw data dumps.<br><br>
+              <strong>2. Own the user feedback loop:</strong> Customer call notes, support tickets, NPS verbatims, forum discussions — senior PMs want signals from this, not the raw volume. I'd build and maintain a structured insight pipeline that surfaces the most important themes weekly.<br><br>
+              <strong>3. Draft first — let them edit:</strong> PRDs, user stories, one-pagers — I'd produce v1 so Jefferson and others are reacting and refining, not starting from blank. An hour of a senior PM's editing time produces better output than 3 hours of generation time.<br><br>
+              <strong>4. Run the product demo machine:</strong> ClearScape demos, customer presentations, internal roadmap decks — these are high-effort, time-consuming, and learnable. I'd take these off the senior PM's plate within 60 days.<br><br>
+              <strong>5. Be a second set of eyes on their blind spots:</strong> As the person closest to the ground level, I'll hear things from user conversations that senior PMs don't. I'd make sure those signals reach the right people without noise.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ META-STYLE ═══ -->
+    <div class="section" id="meta">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Meta-Style Rapid-Fire Questions</h2>
+      </div>
+      <p class="section-desc">Raj's Meta background means he may use compressed, high-signal questions designed to get to your instincts fast. These need crisp, confident answers — not long preambles.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">M·01</span>
+          <div class="q-content">
+            <div class="q-text">"Give me your one-minute take on the most important product principle you hold."</div>
+            <div class="q-tags"><span class="q-tag tag-b">Rapid-Fire</span><span class="q-tag tag-r">PM Philosophy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — One Genuine Principle, Well-Said</div>
+          <div class="answer-text">
+            <p>"The single principle I keep coming back to: <strong>users don't know what they want, but they always know what's frustrating them</strong>. My job is to listen hard to the frustration, resist the solution they offer, and find the underlying job-to-be-done."</p>
+            <p>"This sounds simple. In practice it's the hardest discipline in PM. The instinct to say yes to user requests — especially if they're from an important customer — is powerful. Resisting it requires confidence in the problem definition that you only get from deep user research and a clear north star. Everything else in my product process exists to serve that discipline."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">M·02</span>
+          <div class="q-content">
+            <div class="q-text">"You have to kill one of your current features. How do you decide which one?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Rapid-Fire</span><span class="q-tag tag-r">Prioritisation</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Decisive</div>
+          <div class="answer-text">
+            <p>"I'd look for the feature that has the highest maintenance cost relative to its actual usage. Not its stated importance — its actual usage."</p>
+            <p>"In most products there are features that were important at the time they were built, that have loud internal advocates, but that actual users have largely stopped using. These are the features that consume engineering time in every release ('we have to make sure it doesn't break') without contributing to the north star metric."</p>
+            <p>"The kill criteria: usage below X% of active users for 6+ months AND no clear roadmap reason why that changes AND the removal creates engineering headroom that funds something with higher ROI. That combination makes the business case undeniable."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">M·03</span>
+          <div class="q-content">
+            <div class="q-text">"What's the most important thing you've changed your mind about in the last year regarding AI?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Rapid-Fire</span><span class="q-tag tag-t">AI Thinking</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Genuinely Reflective</div>
+          <div class="answer-text">
+            <p>"A year ago I believed that LLM accuracy was the binding constraint on AI adoption in enterprise. Build a more accurate model, get faster adoption. I've updated significantly on this."</p>
+            <p>"The binding constraint isn't accuracy — it's <strong>trust architecture</strong>. We already have models accurate enough to be useful in most enterprise contexts. What enterprises don't have is the governance framework, the audit trail, the human oversight model, and the internal accountability structure to deploy them confidently."</p>
+            <p>"This is why Teradata's approach — grounding agents in governed, auditable, structured enterprise data — is more strategically important than building a marginally better model. The problem isn't the model. The problem is everything around the model."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">M·04</span>
+          <div class="q-content">
+            <div class="q-text">"Pick a product you use every day and tell me one thing you'd change."</div>
+            <div class="q-tags"><span class="q-tag tag-b">Rapid-Fire</span><span class="q-tag tag-r">Product Sense</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Specific and Show PM Instinct</div>
+          <div class="answer-text">
+            <p><strong>Product:</strong> Notion (or your actual daily tool — adapt authentically)</p>
+            <p><strong>Change:</strong> "Notion's biggest friction for me is the absence of a reliable 'capture and organise later' mode. When I have a half-formed idea or an important piece of information, the optimal action is to capture it instantly without deciding where it goes. Currently, anything I add to Notion requires me to make a location decision at the moment of capture — which creates enough friction that I skip Notion entirely and use my phone's notes app for the initial capture."</p>
+            <p>"What I'd build: an AI-powered global inbox that takes anything — a voice note, a clipped web page, a typed thought — with zero structure decisions required. Once daily, it surfaces the captured items and suggests where they might live based on your existing Notion structure. Capture now, organise when you have the context. I believe this would change Notion from a 'deliberate workspace' tool to an 'always-on thinking partner.' The north star metric: daily active captures per user."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">M·05</span>
+          <div class="q-content">
+            <div class="q-text">"What question should I be asking you that I haven't?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Closing</span><span class="q-tag tag-r">Self-Awareness</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Ideal Answer — Be Prepared for This</div>
+          <div class="answer-text">
+            <p>"You haven't asked me what excites me most about the specific problem your team is working on — the Agentic AI Platform. And I think the answer matters, because someone who's excited about data warehousing and someone who's excited about autonomous AI agents are going to show up very differently to this work."</p>
+            <p>"What excites me most: the governance problem. Everyone's building AI agents. Very few people are building them in a way that a bank's legal team would actually sign off on. The work of making agents trustworthy — explainable, auditable, scope-contained — is the hard, unresolved product problem. It's the difference between AI that's a demo and AI that's a product. That's what I want to work on."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ YOUR QUESTIONS ═══ -->
+    <div class="section" id="closing">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Your Questions to Ask Raj</h2>
+      </div>
+      <p class="section-desc">Raj will judge the quality of your questions as much as your answers. Generic questions about culture or growth will signal you're not at his level. These are senior-director-appropriate questions.</p>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">Q·01</span>
+          <div class="q-content">
+            <div class="q-text">"The Agentic AI Platform is Teradata's most forward-looking bet right now. What's the hardest unsolved product problem you're personally wrestling with on it?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Top Question</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>This is the most powerful question you can ask Raj. It invites him to talk about what he actually thinks about, at the level he actually operates. It signals you're ready to engage at that level too. His answer will almost certainly be more valuable than anything in this guide, and it will make the conversation memorable for him.</p>
+            <div class="callout success">
+              <div class="icon">✓</div>
+              <div class="body"><strong>This question is a differentiator.</strong> 90% of candidates ask about culture, growth paths, or team structure. This question shows you're thinking about the hard, interesting problems — which is exactly what Raj is looking for in an APM.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">Q·02</span>
+          <div class="q-content">
+            <div class="q-text">"How does the relationship between the Agentic Platform and ClearScape Analytics evolve — are they converging or staying distinct?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Platform Strategy</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>You've now interviewed with both Jefferson (ClearScape Analytics PM) and Raj (Agentic AI Platform). Asking how the two products relate demonstrates you're thinking about Teradata as a system, not just two separate roles. It also shows you're already thinking like a PM who needs to understand the roadmap context, not just the immediate scope of your role.</p>
+            <p>His answer will tell you a lot about internal alignment and where the company is actually heading — information you'll need to make a good decision if you get an offer.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">Q·03</span>
+          <div class="q-content">
+            <div class="q-text">"You built at Meta's scale and now you're at Teradata. What's the thing about enterprise-scale data product management that surprised you most when you made that transition?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Rapport + Learning</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>This question does double duty: it's a genuine rapport builder (Raj gets to reflect on his own experience) and it's self-serving information gathering for you (his answer will tell you what the real learning curve looks like if you join). It also shows intellectual curiosity about his journey, not just about the job title.</p>
+            <p>Bonus: it subtly acknowledges the experience gap without making it awkward — you're asking him to teach you something, which is exactly the posture an APM should have with a Sr. Director.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-header">
+          <span class="q-num">Q·04</span>
+          <div class="q-content">
+            <div class="q-text">"What would make you say, 6 months from now, that hiring for this role was the right decision?"</div>
+            <div class="q-tags"><span class="q-tag tag-b">Success Alignment</span></div>
+          </div>
+          <div class="q-chevron">▼</div>
+        </div>
+        <div class="q-body">
+          <div class="answer-label">Why Ask This</div>
+          <div class="answer-text">
+            <p>This is a different version of the "what does success look like" question — but asked in a way that's personal and direct to Raj, not generic. His answer becomes your success criteria if you get the job. It also shows you're thinking about accountability and outcomes from the first conversation, not just getting through the interview.</p>
+            <p>Ask this as your final question. It's the cleanest way to close — it leaves Raj thinking about you in the role, not just in the interview seat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CHEAT SHEET -->
+    <div class="section" id="cheat">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-title">Metrics Cheat Sheet + Pre-Interview Brief</h2>
+      </div>
+      <p class="section-desc">Memorise these cold. Raj may not ask about them directly, but they should be woven naturally into every relevant answer.</p>
+
+      <div class="metrics-row">
+        <div class="m-chip"><strong>↑38%</strong><span>Sprint rework reduction</span></div>
+        <div class="m-chip"><strong>↓21.8%</strong><span>Churn reduction</span></div>
+        <div class="m-chip"><strong>↑46%</strong><span>Sales efficiency lift</span></div>
+        <div class="m-chip"><strong>↑400%</strong><span>Revenue in 4 months</span></div>
+        <div class="m-chip"><strong>3→7%</strong><span>Conversion rate lift</span></div>
+        <div class="m-chip"><strong>↑16%</strong><span>CVR improvement</span></div>
+        <div class="m-chip"><strong>↑24%</strong><span>CTR lift</span></div>
+        <div class="m-chip"><strong>₹2L→₹10L</strong><span>Revenue growth</span></div>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <div class="callout success">
+          <div class="icon">✅</div>
+          <div class="body">
+            <strong>Final Pre-Interview Checklist for Raj Sundaram</strong><br><br>
+            › Read Raj's LinkedIn activity for any recent posts (his follower count is 500+ — he may post occasionally)<br>
+            › Re-read Teradata's Agentic AI platform announcements: search "Teradata Autonomous AI Knowledge Platform 2025"<br>
+            › Read about Teradata's AI Factory launch (announced recently per LinkedIn)<br>
+            › Know the difference: ClearScape Analytics (Jefferson's product) vs. Agentic AI Platform (Raj's product)<br>
+            › Prepare your "platform vs feature PM" answer — he will probe this<br>
+            › Know what RAG, ModelOps, BYOM, and model drift mean fluently<br>
+            › Have a genuine point of view on agentic AI risks — not just benefits<br>
+            › Open by referencing your Round 1 conversation with Jefferson — this signals seriousness<br>
+            › Your experience gap is real — own it with a specific reframe, don't hide it<br>
+            › Ask Q·01 (his hardest unsolved problem) — it will define the conversation
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-section">
+      <h2>Round 2 Summary: What Raj Is Looking For</h2>
+      <ul class="checklist">
+        <li><strong>Strategic thinking, not just execution:</strong> Can you reason about why something should be built, not just how?</li>
+        <li><strong>Agentic AI literacy:</strong> Can you engage with his platform's challenges as a peer, not as a student?</li>
+        <li><strong>Platform intuition:</strong> Do you think in systems and ecosystems, or in individual features?</li>
+        <li><strong>Intellectual honesty about your experience:</strong> The right posture with a 15-year veteran is curiosity + confidence, not false equivalence.</li>
+        <li><strong>Commercial clarity:</strong> Can you connect product decisions to business outcomes without prompting?</li>
+        <li><strong>Quality of your questions:</strong> Ask the hardest, most interesting questions you can. Generic questions signal generic thinking.</li>
+      </ul>
+      <div style="margin-top: 24px; font-family: 'Fira Code', monospace; font-size: 11px; color: var(--text-muted);">
+        Round 2 Guide · Yashwanth Reddy Yatham × Raj Sundaram · Teradata APM (Analytics) · Sr. Director, Agentic AI Platform
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  function toggle(card) {
+    card.classList.toggle('open');
+    updateProgress();
+  }
+
+  function setActive(el) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.q-card').length;
+    const opened = document.querySelectorAll('.q-card.open').length;
+    const pct = Math.round((opened / total) * 100);
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = opened + ' of ' + total + ' questions reviewed';
+  }
+
+  const scrollBtn = document.getElementById('scrollTop');
+  const main = document.querySelector('.main');
+
+  main.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', main.scrollTop > 300);
+    const sections = ['intro','elevation','strategic','agentic','leadership','resume','meta','closing','cheat'];
+    let current = 'intro';
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 200) current = id;
+    }
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('href') === '#' + current);
+    });
+  });
+
+  document.querySelectorAll('.nav-item[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
